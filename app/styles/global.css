@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Doodle+Shadow&display=swap');
+
+:root {
+  --white: #fffded;
+
+  /*
+  -- FRIDGE COLORS --
+  */
+
+  --body: #1abc9c;
+  --bottom: #2BA98C;
+  --accent: #efefef;
+  --accent2: #d9d8d9;
+  --div: #2c3e50;
+
+  /* 
+  -- POST IT COLORS --
+  */
+  --base: #FEF172;
+  --top: #c8bd58;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#__nuxt, html, body, #main {
+  height: 100%;
+  width: 100%;
+  background-color: var(--white);
+}
+
+.flex-centered {
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  
+}

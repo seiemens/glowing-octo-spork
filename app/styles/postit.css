@@ -1,0 +1,6 @@
+.postit {
+  width: 10vh;
+  height: 10vh;
+
+  background-image: linear-gradient(0deg, var(--top) 25%, var(--base) 75%);
+}
