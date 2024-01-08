@@ -1,5 +1,5 @@
 <template>
-  <div class="postit">
+  <div class="postit" @click="changePopupState()">
     <div class="header flex-v flex-h"> {{ title }}</div>
     {{ content }}
     <div class="footer">by {{ author }}</div>
@@ -19,19 +19,24 @@
   font-size: 2vh;
   
   text-overflow: ellipsis;
+
 }
 
 .footer {
   position: absolute;
   bottom: 0;
   right:1vh;
+  font-size: 1.5vh;
+
 }
 
 .postit {
   position: relative;
   width: 20vh;
   height: 20vh;
+  overflow: hidden;
 
+  font-size: 1.5vh;
   text-overflow: ellipsis;
   /* border: 0.1vh solid black; */
 
@@ -40,7 +45,16 @@
 
   transform: rotateZ(v-bind(rotation));
   margin: v-bind(margin);
+
+  transition: 0.2s;
 }
+
+.postit:hover {
+  cursor: pointer;
+  transform: translate(-1vh, -1vh) rotateZ(v-bind(rotation));
+  box-shadow: 1vh 1vh rgba(0, 0, 0, 0.5);
+}
+
 </style>
 
 
@@ -56,5 +70,10 @@ const props = defineProps({
 
 const rotation = `${(Math.round(Math.random() * MAX_ROTATION * (Math.random() > 0.5 ? -1 : 1)))}deg`;
 const margin = `${Math.round(Math.random() * MAX_MARGIN)}vh`;
+
+
+function changePopupState() {
+  $emit("popup");
+}
 
 </script>

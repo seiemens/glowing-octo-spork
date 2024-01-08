@@ -1,3 +1,5 @@
+<!-- TODO: IMPLEMENT POPUP   -->
+
 <template>
   <div id="fridge">
     <div class="fridge-head flex-h flex-v">
@@ -12,6 +14,8 @@
         :title="p.title"
         :content="p.content"
         :author="p.author"
+        @popup="openPopup"
+      />
       />
     </div>
     <div class="bottom"></div>
