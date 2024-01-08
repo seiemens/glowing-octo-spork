@@ -4,6 +4,6 @@ require 'mongoid'
 # mongodb oogabooga
 Mongoid.load! 'mongoid.config'
 
-# get '/' do
-#   '🐳'
-# end
+get '/' do
+  '🐳'
+end
