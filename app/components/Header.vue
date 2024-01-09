@@ -1,6 +1,12 @@
 <template>
-  <div>
-    <span class="logo">FRIDGE IT</span>
+  <div class="flex-h row">
+    <div class="logo">FRIDGE IT</div>
+
+    <div class="nav">
+      <a href="">login</a>
+      <a href="">profile</a>
+    </div>
+
   </div>
 </template>
 
