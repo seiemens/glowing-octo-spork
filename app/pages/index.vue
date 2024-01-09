@@ -26,7 +26,7 @@ const posts = [
   },
   {
     "id": 3,
-    "title": "Artistic Chaos",
+    "title": "Artistic Chaossssssssssssssssssssssssssssssssssssssssssss",
     "content": "Turning my fridge into an art gallery with post-it doodles. Embracing the creative mess!",
     "author": "DoodleMaster",
     "userID": 54321098765432,

@@ -16,7 +16,6 @@
         :author="p.author"
         @popup="openPopup"
       />
-      />
     </div>
     <div class="bottom"></div>
   </div>

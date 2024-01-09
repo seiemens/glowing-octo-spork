@@ -1,7 +1,7 @@
 <template>
   <div class="postit" @click="changePopupState()">
-    <div class="header flex-v flex-h"> {{ title }}</div>
-    {{ content }}
+    <div class="header"> {{ title }}</div>
+    <div class="content">{{ content }}</div>
     <div class="footer">by {{ author }}</div>
   </div>
 </template>
@@ -12,14 +12,18 @@
 
 .header {
   width: 100%;
-  height: 20%;
+  height: 4vh;
+
+  margin: auto 0;
   background-color: var(--top);
 
+  text-align: center;
   font-family: 'Pacifico', cursive;
   font-size: 2vh;
   
   text-overflow: ellipsis;
-
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .footer {
@@ -28,6 +32,20 @@
   right:1vh;
   font-size: 1.5vh;
 
+}
+
+.content {
+  width: 90%;
+  margin: 0 auto;
+  line-height: 2.25vh;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical; 
+
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .postit {
