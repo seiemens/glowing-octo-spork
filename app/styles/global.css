@@ -14,6 +14,13 @@
   --accent2: #d9d8d9;
   --div: #2c3e50;
 
+  /*
+  -- SMALL FRIDGE COLORS --
+  */
+  --sbody: #bd1a3b;
+  --sbottom: #99152f;
+  --sback: #801127;
+
   /* 
   -- POST IT COLORS --
   */
@@ -52,6 +59,12 @@
 
 .container {
   width: 100%;
-  height: fit-content;
   padding-bottom: 4vh;
+}
+
+.fc {
+  height: fit-content;
+}
+.fh {
+  height: 80vh;
 }

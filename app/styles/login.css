@@ -1,0 +1,132 @@
+.small-fridge {
+  position: absolute;
+  width: 47.5vh;
+  height: 60vh;
+  
+  background-color: var(--sbody);
+
+  border-radius: 10vh 10vh 5vh 5vh;
+
+  box-shadow: 10vh -5vh var(--sback), 9vh -4.5vh var(--sback), 
+  8vh -4vh var(--sback), 7vh -3.5vh var(--sback), 
+  6vh -3vh var(--sback), 5vh -2.5vh var(--sback), 
+  4vh -2vh var(--sback), 3vh -1.5vh var(--sback), 
+  2vh -1vh var(--sback), 1vh -0.5vh var(--sback);
+
+  animation: bob 2.5s infinite;
+}
+
+.small-fridge::after {
+  content: "";
+  
+  position: absolute;
+  top: 20vh;
+
+  width: 100%;
+  height: 2vh;
+
+  background-image: linear-gradient(0deg, var(--accent) 33%, var(--div) 33%, var(--div) 66%, var(--accent) 66%);
+}
+
+.small-fridge::before {
+  content: "";
+
+  position: absolute;
+  bottom: 0;
+
+  width: 100%;
+  height: 5vh;
+
+  background-color: var(--sbottom);
+  border-radius: 0 0 5vh 5vh;
+}
+
+.handle, .handle::after {
+  position: absolute;
+  right: 2vh;
+  top: 15.5vh;
+
+  height: 2.5vh;
+  width: 12.5vh;
+  background-image: linear-gradient(0deg, var(--accent) 50%, var(--accent2) 50%);
+  border-radius: 20vh 15vh 15vh 20vh;
+}
+
+.handle::after {
+  content: "";
+  position: absolute;
+  top: 8.5vh;
+  right: 0;
+}
+
+.inputs {
+  margin-top: 20vh;
+}
+
+input, button {
+  font-size: 3vh;
+  padding: 0.5vh 1vh;
+  margin-top: 2vh;
+
+  border-radius: 1vh;
+  border: none;
+
+  font-family: 'Pacifico', serif;
+  background-color: var(--sback);
+  color: var(--accent);
+
+  transition: 0.1s;
+}
+
+input::placeholder {
+  color: var(--accent);
+  opacity: 0.85;
+}
+
+button:hover {
+  cursor: pointer;
+  transform: translate(-0.5vh, -0.5vh);
+  box-shadow: 0.5vh 0.5vh black;
+}
+
+.shadow {
+  position: absolute;
+  bottom: -15vh;
+  left: 6vh;
+  
+  width: 50vh;
+  height: 10vh;
+  
+  background-color: rgba(0, 0, 0, 0.7);
+
+  border-radius: 50%;
+  transform: rotateX(50deg);
+
+  animation: shrink 2.5s infinite;
+}
+
+@keyframes bob {
+  from {
+    top: 20vh;
+  } 
+  50% {
+    top: 21vh;
+  }
+  to {
+    top: 20vh;
+  }
+}
+
+@keyframes shrink {
+  from {
+    width: 45vh;
+  }
+  50% {
+    width: 50vh;
+    left: 4vh;
+    bottom: -14vh;
+  }
+  to {
+    width: 45vh;
+  }
+}

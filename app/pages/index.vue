@@ -1,5 +1,5 @@
 <template>
-  <div class="container flex-h">
+  <div class="container fc flex-h">
     <Fridge type="public" :posts="posts"/>
   </div>
 </template>

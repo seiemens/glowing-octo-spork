@@ -1,5 +1,4 @@
 <!-- TODO: IMPLEMENT POPUP   -->
-
 <template>
   <div id="fridge">
     <div class="fridge-head flex-h flex-v col">

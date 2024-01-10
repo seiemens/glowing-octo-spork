@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-h row">
+  <div class="flex-v row head">
     <div class="logo">FRIDGE IT</div>
 
     <div class="nav">

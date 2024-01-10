@@ -82,6 +82,6 @@
   color: var(--accent);
 }
 
-::placeholder {
+#filter::placeholder {
   opacity: 0.8;
 }

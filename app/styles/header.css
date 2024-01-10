@@ -1,4 +1,4 @@
-div {
+.head {
   width: calc(100% - 2vh);
   padding: 0.5vh 1vh;
 }
