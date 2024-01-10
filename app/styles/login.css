@@ -1,3 +1,13 @@
+.switcher {
+  position: absolute;
+  top: 0;
+}
+.register-mode {
+  --sback: rgb(14, 55, 112);
+  --sbody: #1a5ebc;
+  --sbottom: #124894;
+}
+
 .small-fridge {
   position: absolute;
   width: 47.5vh;
@@ -14,6 +24,8 @@
   2vh -1vh var(--sback), 1vh -0.5vh var(--sback);
 
   animation: bob 2.5s infinite;
+  
+  transition: 0.5s;
 }
 
 .small-fridge::after {
@@ -60,7 +72,7 @@
 }
 
 .inputs {
-  margin-top: 20vh;
+  margin-top: 13vh;
 }
 
 input, button {
@@ -89,6 +101,14 @@ button:hover {
   box-shadow: 0.5vh 0.5vh black;
 }
 
+.title {
+  font-family: 'Lobster', sans-serif;
+  font-size: 7vh;
+  color:var(--accent);
+
+  transform: rotateZ(-10deg);
+}
+
 .shadow {
   position: absolute;
   bottom: -15vh;
@@ -103,6 +123,15 @@ button:hover {
   transform: rotateX(50deg);
 
   animation: shrink 2.5s infinite;
+}
+
+@keyframes spiin {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(180deg);
+  }
 }
 
 @keyframes bob {

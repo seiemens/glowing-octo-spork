@@ -4,6 +4,33 @@
 }
 
 .logo {
+  width: 50%;
   font-family: 'Rubik Doodle Shadow', system-ui;
   font-size: 5vh;
+  text-decoration: none;
+  color: black;
+}
+
+.nav {
+  width: 50%;
+  justify-content: flex-end;
+}
+
+.nav a {
+  padding: 1vh;
+  font-size: 3vh;
+  margin-left: 1vh;
+  font-family: 'Rubik Doodle Shadow', system-ui;
+  text-decoration: none;
+  color: black;
+
+  /* border: 0.2vh solid black;
+  border-radius: 2vh; */
+  transition: 0.1s;
+}
+
+.nav a:hover {
+  font-size: 3.5vh;
+  margin-left: -0.5vh;
+  margin-top: -0.25vh;
 }
