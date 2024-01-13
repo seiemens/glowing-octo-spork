@@ -34,7 +34,7 @@ function move() {
   document.getElementById('main').addEventListener('mouseover', (e)=>{
     let tracer = document.getElementById("blob");
 
-    if (['A','INPUT','BUTTON'].includes(e.target.tagName)) {
+    if (['A','INPUT','BUTTON', 'LABEL'].includes(e.target.tagName)) {
       tracer.style.scale = 0;
     }
     else {
