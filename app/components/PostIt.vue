@@ -83,15 +83,17 @@ const MAX_MARGIN = 7; // in vh
 const props = defineProps({
   title: String,
   content: String,
-  author: String
+  author: String,
 });
+
+const emit = defineEmits(['popup']);
 
 const rotation = `${(Math.round(Math.random() * MAX_ROTATION * (Math.random() > 0.5 ? -1 : 1)))}deg`;
 const margin = `${Math.round(Math.random() * MAX_MARGIN)}vh`;
 
 
 function changePopupState() {
-  $emit("popup");
+  emit('popup');
 }
 
 </script>

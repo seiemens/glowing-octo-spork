@@ -1,0 +1,73 @@
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100vh;
+  height: fit-content;
+}
+
+.bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+  height: 100%;
+  width: 100%;
+
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+.contents {
+  position: relative;
+  width: 80vh;
+  min-height: 60vh;
+  height: fit-content;
+
+  background-color: var(--base);
+  z-index: 20;
+  border-radius: 1vh;
+}
+
+.header {
+  width: 100%;
+  height: 10vh;
+  background-color: var(--top);
+
+  font-family: 'Pacifico', cursive;
+  font-size: 5vh;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  border-radius: 1vh;
+}
+
+.text {
+  height: fit-content;
+  width: 95%;
+  margin: 1vh auto;
+
+  font-size: 1.75vh;
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
+.author {
+  position: absolute;
+  font-size: 1.5vh;
+  bottom: 0.5vh;
+  right: 1vh;
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
+.comment {
+  position: relative;
+  background-color: var(--base);
+  width: calc(80vh - 4vh);
+  border-radius: 2vh;
+  padding: 2vh 2vh;
+  margin: 2vh 0;
+  font-size: 1.5vh;
+  font-family: 'Gloria Hallelujah', cursive;
+}

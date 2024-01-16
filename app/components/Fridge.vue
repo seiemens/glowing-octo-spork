@@ -11,14 +11,22 @@
     <div class="divider"></div>
     <div class="section flex-h">
       <span class="handle-2"></span>
-      <PostIt v-for="p in displayedPosts" :key="p.id"
-        :id="p.id"
+      <PostIt v-for="p in displayedPosts"
+        :number="p.id"
         :title="p.title"
         :content="p.content"
         :author="p.author"
+        @popup="popup = p"
       />
     </div>
     <div class="bottom"></div>
+    <Popup v-if="popup != undefined" @popup="popup = undefined"
+      :id="popup.id"
+      :title="popup.title"
+      :content="popup.content"
+      :author="popup.author"
+      :comments="popup.comments"
+    />
   </div>
 </template>
 
@@ -35,8 +43,8 @@ const props = defineProps({
     required: true
   }
 });
-
 const displayedPosts = ref(props.posts);
+const popup = ref(undefined);
 
 function filter() {
   const search = document.getElementById('filter').value.toLowerCase();
