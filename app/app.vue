@@ -13,8 +13,8 @@
   top: 50%;
   left: 50%;
   translate: -50% -50%;
-  height:2vh;
-  width:2vh;
+  height:1.5vh;
+  width:1.5vh;
   background-color:white;
   border-radius:50%;
   
