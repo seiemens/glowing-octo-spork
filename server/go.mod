@@ -1,4 +1,4 @@
-module main
+module fridge
 
 go 1.19
 

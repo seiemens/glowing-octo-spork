@@ -8,10 +8,11 @@ const (
 	Deleted                     // EnumIndex = 3
 )
 
-type Snippet struct {
+type Note struct {
 	ID      string `json:"id"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
 	UserID  string `json:"userid"`
+	Author  string `json:"author"`
 	Status  status `json:"status"`
 }
