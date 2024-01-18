@@ -2,9 +2,16 @@
   <div class="popup flex-h flex-v col">
     <div class="bg" @click="changePopupState()"></div>
     <div class="contents">
-      <div class="header flex-h flex-v">{{ title }}</div>
+      <div class="popup-header flex-h flex-v">{{ title }}</div>
       <div class="text flex-v">{{ content }}</div>
       <div class="author">written by {{ author }}</div>
+
+      <select name="visibility" v-model="postVisibility" v-if="isOwner">
+        <option value="visible">public</option>
+        <option value="hidden">hidden</option>
+        <option value="deleted">deleted</option>
+      </select>
+      
       <a class="open-btn" @click="changeCommentState()">↫</a>
     </div>
     <div class="comments" :id="id">
@@ -47,13 +54,19 @@
 </style>
 
 <script setup>
+
 const props = defineProps({
+  id: Number,
   title: String,
   content: String,
   author: String,
-  id: Number,
-  comments: Array
+  userID: String,
+  comments: Array,
+  status: String,
+
+  isOwner: Boolean
 });
+const postVisibility = ref(props.status);
 
 const commentsVisible = ref("-31vh");
 const buttonRotation = ref("-90deg");
@@ -67,4 +80,5 @@ function changeCommentState() {
   commentsVisible.value = commentsVisible.value == "1vh" ? "-31vh" : "1vh";
   buttonRotation.value = buttonRotation.value == "-90deg" ? "90deg" : "-90deg";
 }
+
 </script>

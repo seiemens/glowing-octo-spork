@@ -4,7 +4,6 @@
 
     <div class="nav flex-v">
       <a href="/login">login</a>
-      <a href="">profile</a>
     </div>
 
   </div>

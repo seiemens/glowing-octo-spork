@@ -1,10 +1,12 @@
 <template>
   <div class="container fc flex-h">
-    <Fridge type="public" :posts="posts" :isAdmin="false"/>
+    <Fridge :type="isAdmin ? 'all' : 'private'" :posts="posts" :isAdmin="isAdmin"/>
   </div>
 </template>
 
 <script setup>
+const isAdmin = ref(false);
+
 const posts = [
   {
     "id": 1,

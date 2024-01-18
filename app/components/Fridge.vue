@@ -26,6 +26,9 @@
       :content="popup.content"
       :author="popup.author"
       :comments="popup.comments"
+      :userID="popup.userID"
+      :status="popup.status"
+      :isOwner="checkOwner(popup.userID)"
     />
   </div>
 </template>
@@ -41,7 +44,8 @@ const props = defineProps({
   posts: {
     type: Array,
     required: true
-  }
+  },
+  isAdmin: Boolean
 });
 const displayedPosts = ref(props.posts);
 const popup = ref(undefined);
@@ -56,5 +60,17 @@ function filter() {
       displayedPosts.value.push(element);
     }
   });
+}
+
+function checkOwner(id) {
+  let uid = getUserID();
+  console.log(`${id} | ${uid}`);
+
+  if ((props.isAdmin) | (id == uid)) {
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 </script>
