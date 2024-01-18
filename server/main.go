@@ -10,6 +10,7 @@ import (
 func main() {
 	lib.ConnectToDb()
 
+	lib.CreateSMSToken("41788461103")
 	router := gin.New()
 	router.Use(CORSMiddleware())
 

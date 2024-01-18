@@ -29,7 +29,7 @@ func AuthUser(c *gin.Context) {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"answer": 404})
 	} else {
 		if authUser.Phone != "" {
-			lib.ValidatePhoneNumber(authUser.Phone)
+			lib.CreateSMSToken(authUser.Phone)
 			c.IndentedJSON(http.StatusOK, gin.H{"answer": "2FA initialized"})
 		} else {
 			c.IndentedJSON(http.StatusOK, gin.H{"answer": "no phone number"})

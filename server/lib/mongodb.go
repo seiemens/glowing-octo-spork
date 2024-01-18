@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"fridge/models"
 	"log"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -71,4 +72,28 @@ func AuthUser(username, password string) models.User {
 		return models.User{}
 	}
 	return dbUser
+}
+
+func CreateSMSToken(phone string) {
+	token := EncodeToString(6)
+	tokenDB := Client.Database("fridge")
+	tokenCollection := tokenDB.Collection("smstokens")
+	t := models.Smstoken{
+		AccessToken: token,
+		CreatedAt:   time.Now().UTC(),
+		ExpireOn:    time.Now().Add(time.Second * 10).Unix(),
+	}
+
+	model := mongo.IndexModel{
+		Keys:    bson.M{"created_at": 1},
+		Options: options.Index().SetExpireAfterSeconds(300), // delete totp after 5 min
+	}
+
+	_, err := tokenCollection.Indexes().CreateOne(context.Background(), model)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = tokenCollection.InsertOne(context.Background(), t)
+	SendSMS(phone, token)
 }
