@@ -83,6 +83,10 @@
   color: var(--accent);
 }
 
+.add-btn {
+  margin-left: 0.5vh;
+}
+
 #filter::placeholder {
   opacity: 0.9;
 }
