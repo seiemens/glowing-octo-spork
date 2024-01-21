@@ -3,10 +3,17 @@
     <a class="logo" href="/">FRIDGE IT</a>
 
     <div class="nav flex-v">
-      <a href="/login">login</a>
+      <a href="/login" v-if="!authed">login</a>
+      <div v-if="authed">
+        <a href="/dashboard">dashboard</a>
+        <a href="/profile">profile</a>
+      </div>
     </div>
-
   </div>
 </template>
 
 <style src="~/styles/header.css" scoped></style>
+
+<script setup>
+const authed = ref(false);
+</script>

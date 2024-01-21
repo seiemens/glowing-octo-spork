@@ -73,9 +73,14 @@
 
 
 .register-mode {
-  --sback: rgb(14, 55, 112);
+  --sback: #0e3770;
   --sbody: #1a5ebc;
   --sbottom: #124894;
+}
+.sms-mode {
+  --sback: #22700e;
+  --sbody: #30ac18;
+  --sbottom: #129419;
 }
 
 .small-fridge {
@@ -95,7 +100,6 @@
   2vh -1vh var(--sback), 1vh -0.5vh var(--sback);
 
   animation: bob 2.5s infinite;
-  
   transition: 0.5s;
 }
 
@@ -144,13 +148,14 @@
 }
 
 .inputs {
-  margin-top: 11vh;
+  position: absolute;
+  bottom: 5.75vh;
 }
 
 input, button {
-  font-size: 3vh;
+  font-size: 2.5vh;
   padding: 0.5vh 1vh;
-  margin-top: 2vh;
+  margin-top: 1vh;
 
   border-radius: 1vh;
   border: none;
@@ -174,6 +179,8 @@ button:hover {
 }
 
 .title {
+  position: absolute;
+  top: 6vh;
   font-family: 'Lobster', sans-serif;
   font-size: 7vh;
   color:var(--accent);

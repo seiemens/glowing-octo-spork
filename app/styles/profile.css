@@ -1,0 +1,60 @@
+.box {
+  position: relative;
+  border: none;
+  border-radius: 2vh;
+  padding: 2.5vh 7.5vh;
+  margin: 1.25vh;
+  background-color: var(--body);
+  
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 2.5vh;
+  
+  width: fit-content;
+  max-height: 20vh;
+  box-shadow: 1vh 1vh var(--bottom);
+}
+
+.phone {
+  text-align: center;
+}
+
+code {
+  background-color: var(--bottom);
+  padding: 1vh;
+  border-radius: 1vh;
+}
+
+.header {
+  font-family: 'Lobster', sans-serif;
+  color: var(--accent);
+  font-size: 5vh;
+  margin-top: -2vh;
+  text-align: center;
+  margin-bottom: 1vh;
+}
+
+.small-header {
+  font-family: 'Lobster', sans-serif;
+  color: var(--accent);
+  font-size: 2.5vh;
+}
+
+img {
+  height: 20vh;
+}
+
+input, button {
+  border: none;
+  
+  font-size: 2vh;
+  background-color: var(--bottom);
+  font-family: 'Gloria Hallelujah', cursive;
+
+  border-radius: 1vh;
+  padding: 0.5vh 1.5vh;
+
+  color: var(--accent);
+  margin-right: 1vh;
+  transition: 0.1s;
+}
+

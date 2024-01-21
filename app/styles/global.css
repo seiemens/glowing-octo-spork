@@ -7,9 +7,9 @@
   /*
   -- FRIDGE COLORS --
   */
-
   --body: #1abc9c;
   --bottom: #2BA98C;
+  --disabled: #196150;
   --accent: #efefef;
   --accent2: #d9d8d9;
   --div: #2c3e50;
@@ -37,6 +37,33 @@
   height: 100%;
   width: 100%;
   background-color: var(--white);
+}
+
+input:disabled {
+  background-color: var(--disabled);
+  opacity: 0.4;
+}
+
+button {
+  font-size: 2.5vh;
+  padding: 0.5vh 1vh;
+  margin-top: 1vh;
+  
+  border-radius: 1vh;
+  border: none;
+  
+  font-family: 'Pacifico', serif;
+  background-color: var(--bottom);
+  color: var(--accent);
+  
+  transition: 0.1s;
+  width: fit-content;
+}
+
+button:hover {
+  cursor: pointer;
+  transform: translate(-0.5vh, -0.5vh);
+  box-shadow: 0.5vh 0.5vh black;
 }
 
 .flex-h {
@@ -68,4 +95,9 @@
 }
 .fh {
   height: 80vh;
+}
+
+.pad-2 {
+  padding: 2vh;
+  font-size: 2vh;
 }

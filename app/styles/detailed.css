@@ -1,0 +1,127 @@
+.note {
+  position: relative;
+  width: 80vh;
+  height: 90vh;
+
+  background-color: var(--base);
+  border-radius: 1vh;
+
+  margin-right: 2.5vh;
+}
+
+.popup-header {
+  width: 100%;
+  height: 10vh;
+  background-color: var(--top);
+
+  font-family: 'Pacifico', cursive;
+  font-size: 5vh;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  border-radius: 1vh;
+}
+
+.text {
+  height: fit-content;
+  width: 95%;
+  margin: 1vh auto;
+
+  font-size: 1.75vh;
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
+.author {
+  position: absolute;
+  font-size: 1.5vh;
+  bottom: 0.5vh;
+  right: 1vh;
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
+.comment {
+  position: relative;
+  background-color: var(--base);
+  width: calc(80vh - 4vh);
+  border-radius: 2vh;
+  padding: 2vh 2vh;
+  margin-bottom: 2vh;
+  font-size: 1.5vh;
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
+.input-field {
+  position: relative;
+  margin-bottom: 2vh;
+  width: 80vh;
+}
+
+.input-field input {
+  border: none;
+  width: 70vh;
+}
+.input-field button {
+  border: none;
+  width: 8vh;
+  margin-left: 2vh;
+}
+
+.comments {
+  position: relative;
+  width: 80vh;
+  height: 90vh;
+  overflow-y: scroll;
+  transition: 0.25s;
+}
+
+.comment-section {
+  height: 90vh;
+  width: 80vh;
+}
+
+/*
+-- CUSTOM SELECT --
+*/
+
+/* .select {
+  position: relative;
+  width: fit-content;
+}
+
+.select select {
+  appearance: none;
+  -webkit-appearance: none;
+
+  border: none;
+  border-radius: 1vh;
+  background-color: var(--top);
+
+  font-size: 2vh;
+  font-family: 'Gloria Hallelujah', cursive;
+
+  padding: 0.5vh 1vh;
+}
+
+.select::before,
+.select::after {
+  --size: 0.5vh;
+  position: absolute;
+  content: "";
+  right: 1vh;
+  pointer-events: none;
+}
+
+.select::before {
+  border-left: var(--size) solid transparent;
+  border-right: var(--size) solid transparent;
+  border-bottom: var(--size) solid black;
+  top: 40%;
+}
+
+.select::after {
+  border-left: var(--size) solid transparent;
+  border-right: var(--size) solid transparent;
+  border-top: var(--size) solid black;
+  top: 55%;
+} */

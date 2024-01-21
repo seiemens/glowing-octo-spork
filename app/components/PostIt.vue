@@ -13,10 +13,10 @@
 .header {
   width: 100%;
   height: 4vh;
-
   margin: auto 0;
-  background-color: var(--top);
 
+  color: black;
+  background-color: var(--top);
   text-align: center;
   font-family: 'Pacifico', cursive;
   font-size: 2vh;
@@ -74,7 +74,6 @@
 }
 
 </style>
-
 
 <script setup>
 const MAX_ROTATION = 20; // in degree

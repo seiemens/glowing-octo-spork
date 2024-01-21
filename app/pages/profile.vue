@@ -1,163 +1,61 @@
 <template>
-  <div class="container fc flex-h">
-    <Fridge :type="isAdmin ? 'all' : 'private'" :posts="posts" :isAdmin="isAdmin"/>
+  <div class="flex-h flex-v col fh">
+    <div class="flex-h row">
+      <div class="box">
+        <div class="header">Details</div>
+        <div class="infos flex-h col">
+          <span><span class="small-header">ID: </span>{{ ud.id }}</span>
+          <span><span class="small-header">Username: </span>{{ ud.username }}</span>
+          <span><span class="small-header">Email: </span>{{ ud.email }}</span>
+        </div>
+      </div>
+      <div class="box">
+        <div class="header">Phone #</div>
+        <div class="phone flex-h col">
+          <div class="inputs">
+            <input id="tel-input" type="tel" disabled v-model="tel"/>
+            <button @click="changeInputState()">✎</button>
+          </div>
+          <button @click="changeTelNumber()">Change Phone Number</button>
+        </div>
+      </div>
+    </div>
+    <div class="flex-h row">
+      <div class="box api flex-v flex-h col">
+        <span class="header">Your API key:</span>
+        <code>{{ ud.api_key }}</code>
+      </div>
+      <div class="box flex-h flex-v">
+        <img src="~/public/vibin2cropped.gif" alt="">
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup>
-const isAdmin = ref(false);
+<style src="~/styles/profile.css"></style>
 
-const posts = [
-  {
-    "id": 1,
-    "title": "Sunny Days",
-    "content": "Just found the perfect spot for my post-it notes on the fridge. Ready for a colorful summer!",
-    "author": "SunshineLover",
-    "userID": "12345678901234",
-    "status": "visible",
-    "comments": [
-      { "author": "Commenter1", "comment": "This is such a smart way to manage a family schedule!" },
-      { "author": "Commenter2", "comment": "I need to do this too. Family events can get overwhelming!" },
-      { "author": "Commenter3", "comment": "Your organizational skills are impressive. Any tips?" },
-      { "author": "Commenter4", "comment": "No more missed events for sure. Thanks for the idea!" },
-      { "author": "Commenter5", "comment": "I bet your fridge is the family command center now!" },
-    ],
-  },
-  {
-    "id": 2,
-    "title": "Recipe Reminders",
-    "content": "My fridge is covered in post-its with all my favorite recipes. No more forgetting ingredients!",
-    "author": "ChefAtHeart",
-    "userID": "98765432109876",
-    "status": "visible",
-    "comments": [
-      { "author": "Commenter1", "comment": "This is such a smart way to manage a family schedule!" },
-      { "author": "Commenter2", "comment": "I need to do this too. Family events can get overwhelming!" },
-      { "author": "Commenter3", "comment": "Your organizational skills are impressive. Any tips?" },
-      { "author": "Commenter4", "comment": "No more missed events for sure. Thanks for the idea!" },
-      { "author": "Commenter5", "comment": "I bet your fridge is the family command center now!" },
-    ],
-  },
-  {
-    "id": 3,
-    "title": "Artistic Chaos",
-    "content": "Turning my fridge into an art gallery with post-it doodles. Embracing the creative mess!",
-    "author": "DoodleMaster",
-    "userID": "54321098765432",
-    "status": "visible",
-    "comments": [
-      { "author": "Commenter1", "comment": "This is such a smart way to manage a family schedule!" },
-      { "author": "Commenter2", "comment": "I need to do this too. Family events can get overwhelming!" },
-      { "author": "Commenter3", "comment": "Your organizational skills are impressive. Any tips?" },
-      { "author": "Commenter4", "comment": "No more missed events for sure. Thanks for the idea!" },
-      { "author": "Commenter5", "comment": "I bet your fridge is the family command center now!" },
-    ],
-  },
-  {
-    "id": 4,
-    "title": "Workout Motivation",
-    "content": "Every morning, a new post-it with a motivational quote on the fridge. Let's crush those fitness goals!",
-    "author": "FitLifeChampion",
-    "userID": "13579246802468",
-    "status": "visible",
-    "comments": [
-      { "author": "Commenter1", "comment": "This is such a smart way to manage a family schedule!" },
-      { "author": "Commenter2", "comment": "I need to do this too. Family events can get overwhelming!" },
-      { "author": "Commenter3", "comment": "Your organizational skills are impressive. Any tips?" },
-      { "author": "Commenter4", "comment": "No more missed events for sure. Thanks for the idea!" },
-      { "author": "Commenter5", "comment": "I bet your fridge is the family command center now!" },
-    ],
-  },
-  {
-    "id": 5,
-    "title": "Daily Gratitude",
-    "content": "Started a gratitude post-it ritual on my fridge. It's amazing how a little note can change your perspective!",
-    "author": "GratefulSoul",
-    "userID": "24680135791234",
-    "status": "visible",
-    "comments": [
-      { "author": "Commenter1", "comment": "This is such a smart way to manage a family schedule!" },
-      { "author": "Commenter2", "comment": "I need to do this too. Family events can get overwhelming!" },
-      { "author": "Commenter3", "comment": "Your organizational skills are impressive. Any tips?" },
-      { "author": "Commenter4", "comment": "No more missed events for sure. Thanks for the idea!" },
-      { "author": "Commenter5", "comment": "I bet your fridge is the family command center now!" },
-    ],
-  },
-  {
-    "id": 6,
-    "title": "Techie Notes",
-    "content": "My fridge is now a tech hub with post-its filled with coding snippets and tech reminders.",
-    "author": "CodeGeek",
-    "userID": "98765432123456",
-    "status": "visible",
-    "comments": [
-      { "author": "Commenter1", "comment": "This is such a smart way to manage a family schedule!" },
-      { "author": "Commenter2", "comment": "I need to do this too. Family events can get overwhelming!" },
-      { "author": "Commenter3", "comment": "Your organizational skills are impressive. Any tips?" },
-      { "author": "Commenter4", "comment": "No more missed events for sure. Thanks for the idea!" },
-      { "author": "Commenter5", "comment": "I bet your fridge is the family command center now!" },
-    ],
-  },
-  {
-    "id": 7,
-    "title": "Movie Night Picks",
-    "content": "Keeping track of must-watch movies with post-its on the fridge. Movie night just got more organized!",
-    "author": "Cinephile",
-    "userID": "87654321098765",
-    "status": "visible",
-    "comments": [
-      { "author": "Commenter1", "comment": "This is such a smart way to manage a family schedule!" },
-      { "author": "Commenter2", "comment": "I need to do this too. Family events can get overwhelming!" },
-      { "author": "Commenter3", "comment": "Your organizational skills are impressive. Any tips?" },
-      { "author": "Commenter4", "comment": "No more missed events for sure. Thanks for the idea!" },
-      { "author": "Commenter5", "comment": "I bet your fridge is the family command center now!" },
-    ],
-  },
-  {
-    "id": 8,
-    "title": "Travel Bucket List",
-    "content": "Dreaming of exotic destinations? Post-it notes on the fridge are turning my travel dreams into plans!",
-    "author": "WanderlustDreamer",
-    "userID": "34567890123456",
-    "status": "visible",
-    "comments": [
-      { "author": "Commenter1", "comment": "This is such a smart way to manage a family schedule!" },
-      { "author": "Commenter2", "comment": "I need to do this too. Family events can get overwhelming!" },
-      { "author": "Commenter3", "comment": "Your organizational skills are impressive. Any tips?" },
-      { "author": "Commenter4", "comment": "No more missed events for sure. Thanks for the idea!" },
-      { "author": "Commenter5", "comment": "I bet your fridge is the family command center now!" },
-    ],
-  },
-  {
-    "id": 9,
-    "title": "Bookworm's Corner",
-    "content": "Transformed my fridge into a book recommendations space. Can't wait to explore new literary worlds!",
-    "author": "BookishExplorer",
-    "userID": "65432109876543",
-    "status": "visible",
-    "comments": [
-      { "author": "Commenter1", "comment": "This is such a smart way to manage a family schedule!" },
-      { "author": "Commenter2", "comment": "I need to do this too. Family events can get overwhelming!" },
-      { "author": "Commenter3", "comment": "Your organizational skills are impressive. Any tips?" },
-      { "author": "Commenter4", "comment": "No more missed events for sure. Thanks for the idea!" },
-      { "author": "Commenter5", "comment": "I bet your fridge is the family command center now!" },
-    ],
-  },
-  {
-    "id": 10,
-    "title": "Daily Affirmations",
-    "content": "Starting the day right with positive affirmations on the fridge. Today is going to be amazing!",
-    "author": "PositivityFan",
-    "userID": "12345098765432",
-    "status": "visible",
-    "comments": [
-      { "author": "Commenter1", "comment": "This is such a smart way to manage a family schedule!" },
-      { "author": "Commenter2", "comment": "I need to do this too. Family events can get overwhelming!" },
-      { "author": "Commenter3", "comment": "Your organizational skills are impressive. Any tips?" },
-      { "author": "Commenter4", "comment": "No more missed events for sure. Thanks for the idea!" },
-      { "author": "Commenter5", "comment": "I bet your fridge is the family command center now!" },
-    ],
+<script setup>
+const ud = {
+  id:"3290428244",
+  username:"Kevin",
+  email:"kevin@kevin.ch",
+  phone: "435787654",
+  api_key: "OWidajodiwajdioajd0329448720"
+};
+const tel = ref(ud.phone);
+
+function changeInputState(optional) {
+  const telInput = document.getElementById('tel-input');
+  telInput.disabled = optional || !telInput.disabled;
+}
+
+function changeTelNumber() {
+  console.log(ud.phone + " | " + tel.value);
+  if (ud.phone != tel.value) {
+    // do api things
+
+    // lock the field again
+    changeInputState(false);
   }
-];
-     
+}
 </script>

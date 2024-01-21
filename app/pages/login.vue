@@ -16,8 +16,10 @@
       <div class="title">{{ mode }}</div>
       <span class="handle"></span>
       <div class="inputs flex-v flex-h col">
-        <input type="text" v-model="mail" placeholder="your email" required>
-        <input type="password" v-model="pw" placeholder="your password" required>
+        <input type="text" v-model="username" placeholder="your username" required v-if="mode == 'register' | mode == 'login'">
+        <input type="text" v-model="mail" placeholder="your email" required v-if="mode == 'register'">
+        <input type="password" v-model="pw" placeholder="your password" required v-if="mode == 'register' | mode == 'login'">
+        <input type="text" placeholder="sms code" required v-if="mode == 'sms'">
         <button type="submit">{{ mode }}&#x219D;</button>
       </div>
       <div class="shadow"></div>
@@ -36,6 +38,8 @@ function switchMode() {
   const fridge = document.getElementById('minifridge');
   const switcher = document.getElementById('switch').checked;
 
+  fridge.classList.remove('sms-mode');
+
   if (!switcher) {
     fridge.classList.remove('register-mode');
     mode.value = 'login';
@@ -46,8 +50,21 @@ function switchMode() {
   }
 }
 
-function submitForm() {
-  
+async function submitForm() {
+  const data = {
+    
+  }
+  // await $fetch(``, {
+  //   method: 'POST',
+  //   body: JSON.stringify({
+
+  //   })
+  // }).then(()=> {
+
+  // });
+  document.getElementById('minifridge').classList.add('sms-mode');
+  document.getElementById('minifridge').classList.remove('register-mode');
+  mode.value = 'sms';
 }
 
 </script>

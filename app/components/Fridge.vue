@@ -4,8 +4,10 @@
     <div class="fridge-head flex-h flex-v col">
       <span class="title">{{ type }} post-its</span>
 
-      <input type="text" placeholder="search a post-it!" id="filter" @input="filter()">
-
+      <div class="buttons">
+        <input type="text" placeholder="search a post-it!" id="filter" @input="filter()">
+        <button @click="newPost()" class="add-btn" v-if="type != 'public'">new post-it</button>
+      </div>
       <span class="handle"></span>
     </div>
     <div class="divider"></div>
@@ -47,6 +49,7 @@ const props = defineProps({
   },
   isAdmin: Boolean
 });
+
 const displayedPosts = ref(props.posts);
 const popup = ref(undefined);
 
@@ -65,8 +68,8 @@ function filter() {
 function checkOwner(id) {
   let uid = getUserID();
   console.log(`${id} | ${uid}`);
-
-  if ((props.isAdmin) | (id == uid)) {
+  // only show the visibility checkbox if its not on the public page
+  if (((props.isAdmin) | (id == uid)) && props.type != "public") {
     return true;
   }
   else {

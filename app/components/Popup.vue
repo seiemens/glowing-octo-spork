@@ -6,11 +6,13 @@
       <div class="text flex-v">{{ content }}</div>
       <div class="author">written by {{ author }}</div>
 
-      <select name="visibility" v-model="postVisibility" v-if="isOwner">
-        <option value="visible">public</option>
-        <option value="hidden">hidden</option>
-        <option value="deleted">deleted</option>
-      </select>
+      <div class="select">
+        <select name="visibility" v-model="postVisibility" v-if="isOwner">
+          <option value="1">published</option>
+          <option value="2">hidden</option>
+          <option value="3">deleted</option>
+        </select>
+      </div>
       
       <a class="open-btn" @click="changeCommentState()">↫</a>
     </div>
@@ -54,7 +56,6 @@
 </style>
 
 <script setup>
-
 const props = defineProps({
   id: Number,
   title: String,
@@ -62,7 +63,7 @@ const props = defineProps({
   author: String,
   userID: String,
   comments: Array,
-  status: String,
+  status: Number,
 
   isOwner: Boolean
 });
@@ -80,5 +81,4 @@ function changeCommentState() {
   commentsVisible.value = commentsVisible.value == "1vh" ? "-31vh" : "1vh";
   buttonRotation.value = buttonRotation.value == "-90deg" ? "90deg" : "-90deg";
 }
-
 </script>
