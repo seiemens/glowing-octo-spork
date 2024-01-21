@@ -15,7 +15,8 @@ func CreateUser(c *gin.Context) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	c.IndentedJSON(http.StatusOK, gin.H{"answer": lib.CreateUser(user.Username, user.Email, user.Phone, user.Password)})
+	lib.CreateUser(user.Username, user.Email, user.Phone, user.Password)
+	c.IndentedJSON(http.StatusOK, gin.H{"answer": "user created successfully"})
 }
 
 func AuthUser(c *gin.Context) {
@@ -29,10 +30,26 @@ func AuthUser(c *gin.Context) {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"answer": 404})
 	} else {
 		if authUser.Phone != "" {
-			lib.CreateSMSToken(authUser.Phone)
-			c.IndentedJSON(http.StatusOK, gin.H{"answer": "2FA initialized"})
+			pid := lib.CreateSMSToken(authUser.Phone, authUser.ID)
+			c.IndentedJSON(http.StatusOK, gin.H{"id": pid, "phone": authUser.Phone})
 		} else {
 			c.IndentedJSON(http.StatusOK, gin.H{"answer": "no phone number"})
 		}
 	}
+}
+
+func VerifySMS(c *gin.Context) {
+	var sms models.Smstoken
+	err := c.BindJSON(&sms)
+	if err != nil {
+		fmt.Println(err)
+	}
+	isOk, userId := lib.VerifySMSToken(sms.ProcessID, sms.AccessToken)
+	if isOk {
+		cookie := lib.CreateSessionToken(userId)
+		c.IndentedJSON(http.StatusOK, gin.H{"cookie": cookie})
+	} else {
+		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "wrong token"})
+	}
+
 }

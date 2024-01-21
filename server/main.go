@@ -10,12 +10,12 @@ import (
 func main() {
 	lib.ConnectToDb()
 
-	lib.CreateSMSToken("41788461103")
 	router := gin.New()
 	router.Use(CORSMiddleware())
 
 	router.POST("/api/user/register", api.CreateUser)
 	router.POST("/api/user/auth", api.AuthUser)
+	router.POST("/api/user/sms", api.VerifySMS)
 	router.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
