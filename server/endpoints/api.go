@@ -33,7 +33,8 @@ func AuthUser(c *gin.Context) {
 			pid := lib.CreateSMSToken(authUser.Phone, authUser.ID)
 			c.IndentedJSON(http.StatusOK, gin.H{"id": pid, "phone": authUser.Phone})
 		} else {
-			c.IndentedJSON(http.StatusOK, gin.H{"answer": "no phone number"})
+			cookie := lib.CreateSessionToken(authUser.ID)
+			c.IndentedJSON(http.StatusOK, gin.H{"cookie": cookie.Cookie, "created": cookie.CreatedAt, "expire": cookie.ExpireOn})
 		}
 	}
 }
@@ -47,9 +48,73 @@ func VerifySMS(c *gin.Context) {
 	isOk, userId := lib.VerifySMSToken(sms.ProcessID, sms.AccessToken)
 	if isOk {
 		cookie := lib.CreateSessionToken(userId)
-		c.IndentedJSON(http.StatusOK, gin.H{"cookie": cookie})
+		c.IndentedJSON(http.StatusOK, gin.H{"cookie": cookie.Cookie, "created": cookie.CreatedAt, "expire": cookie.ExpireOn})
 	} else {
 		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "wrong token"})
+	}
+
+}
+
+func GetUserData(c *gin.Context) {
+	var user models.User
+
+	cookie := c.Request.Header.Get("Cookie")
+	ok, userID := lib.VerifySessionToken(cookie)
+	if ok {
+		users := lib.GetUserByKey("id", userID)
+		user = users[0]
+		c.IndentedJSON(http.StatusOK, gin.H{"id": user.ID, "username": user.Username, "email": user.Email, "phone": user.Phone, "isAdmin": user.Admin})
+	} else {
+		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
+	}
+}
+
+func CreateNote(c *gin.Context) {
+	cookie := c.Request.Header.Get("Cookie")
+	ok, userID := lib.VerifySessionToken(cookie)
+	if ok {
+		var note models.Note
+		err := c.BindJSON(&note)
+		if err != nil {
+			fmt.Println(err)
+		}
+		lib.CreateNote(userID, note.Title, note.Content)
+		c.IndentedJSON(http.StatusOK, gin.H{"answer": "note created successfully"})
+	} else {
+		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
+	}
+}
+
+func GetNotes(c *gin.Context) {
+	var mode models.Mode
+	err := c.BindJSON(&mode)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	if mode.Mode == "public" {
+		notes := lib.GetNoteByStatus("status", models.Published)
+		c.IndentedJSON(http.StatusOK, gin.H{"answer": notes})
+	} else if mode.Mode == "user" {
+		cookie := c.Request.Header.Get("Cookie")
+		ok, userID := lib.VerifySessionToken(cookie)
+		if ok {
+			notes := lib.GetNoteByKey("userid", userID)
+			c.IndentedJSON(http.StatusOK, gin.H{"answer": notes})
+		} else {
+			c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
+		}
+	} else if mode.Mode == "admin" {
+		cookie := c.Request.Header.Get("Cookie")
+		ok, userID := lib.VerifySessionToken(cookie)
+		if ok && lib.IsAdmin(userID) {
+			notes := lib.GetAllNotes()
+			c.IndentedJSON(http.StatusOK, gin.H{"answer": notes})
+		} else {
+			c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
+		}
+	} else {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"answer": "try again"})
 	}
 
 }

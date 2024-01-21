@@ -71,6 +71,71 @@ func GetSMSByKey(key string, value interface{}) []models.Smstoken {
 	return result
 }
 
+func GetSessionByKey(key string, value interface{}) []models.Cookie {
+	dbCollection := *Client.Database("fridge").Collection("sessions")
+	res, err := dbCollection.Find(context.Background(), bson.D{{key, primitive.Regex{Pattern: "^.*" + value.(string) + ".*", Options: ""}}})
+	if err != nil {
+		log.Fatal(err)
+	}
+	var result []models.Cookie
+	if err = res.All(context.Background(), &result); err != nil {
+		log.Fatal(err)
+	}
+	return result
+}
+
+func GetUserByKey(key string, value interface{}) []models.User {
+	dbCollection := *Client.Database("fridge").Collection("userDB")
+	res, err := dbCollection.Find(context.Background(), bson.D{{key, primitive.Regex{Pattern: "^.*" + value.(string) + ".*", Options: ""}}})
+	if err != nil {
+		log.Fatal(err)
+	}
+	var result []models.User
+	if err = res.All(context.Background(), &result); err != nil {
+		log.Fatal(err)
+	}
+	return result
+}
+
+func GetNoteByStatus(key string, value models.Status) []models.Note {
+	dbCollection := *Client.Database("fridge").Collection("noteDB")
+	res, err := dbCollection.Find(context.Background(), bson.D{{key, value}})
+	if err != nil {
+		log.Fatal(err)
+	}
+	var result []models.Note
+	if err = res.All(context.Background(), &result); err != nil {
+		log.Fatal(err)
+	}
+	return result
+}
+
+func GetNoteByKey(key string, value interface{}) []models.Note {
+	dbCollection := *Client.Database("fridge").Collection("noteDB")
+	res, err := dbCollection.Find(context.Background(), bson.D{{key, primitive.Regex{Pattern: "^.*" + value.(string) + ".*", Options: ""}}})
+	if err != nil {
+		log.Fatal(err)
+	}
+	var result []models.Note
+	if err = res.All(context.Background(), &result); err != nil {
+		log.Fatal(err)
+	}
+	return result
+}
+
+func GetAllNotes() []models.Note {
+	noteCollection := *Client.Database("fridge").Collection("noteDB")
+	cursor, err := noteCollection.Find(context.Background(), bson.M{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	var notes []models.Note
+	if err = cursor.All(context.Background(), &notes); err != nil {
+		log.Fatal(err)
+	}
+	return notes
+}
+
 func AuthUser(username, password string) models.User {
 	var dbUser models.User
 	userCollection := Client.Database("fridge").Collection("userDB")
@@ -148,4 +213,45 @@ func CreateSessionToken(userId string) models.Cookie {
 	}
 	_, err = tokenCollection.InsertOne(context.Background(), t)
 	return t
+}
+
+func VerifySessionToken(sessionToken string) (bool, string) {
+	test := GetSessionByKey("cookie", sessionToken)
+	if len(test) > 0 {
+		if test[0].Cookie == sessionToken {
+			return true, test[0].UserID
+		} else {
+			return false, ""
+		}
+	} else {
+		return false, ""
+	}
+}
+
+func CreateNote(userID, title, content string) interface{} {
+	user := GetUserByKey("id", userID)[0]
+
+	var x = models.Note{
+		ID:       GenerateRandomString(8, false),
+		Title:    title,
+		Content:  content,
+		UserID:   userID,
+		Author:   user.Username,
+		Status:   models.Hidden,
+		Comments: []models.Comment{},
+	}
+	noteDB := Client.Database("fridge")
+	noteCollection := noteDB.Collection("noteDB")
+	_, err := noteCollection.InsertOne(context.Background(), x)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Successfully created note")
+	return x
+
+}
+
+func IsAdmin(userID string) bool {
+	user := GetUserByKey("id", userID)[0]
+	return user.Admin
 }
