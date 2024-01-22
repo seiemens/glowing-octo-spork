@@ -5,9 +5,12 @@ import (
 	crypto "crypto/rand"
 	"encoding/json"
 	"io"
+	"log"
 	rand "math/rand"
 	"net/http"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func GenerateRandomString(lenght int, includeSpecial bool) string {
@@ -28,12 +31,23 @@ func GenerateRandomString(lenght int, includeSpecial bool) string {
 	return string(b)
 }
 
-func CheckHashPassword(hash, password string) bool {
+func CheckHashPassword(hashedPwd string, plainPwd []byte) bool {
+	byteHash := []byte(hashedPwd)
+	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+
 	return true
 }
 
-func HashPassword(password string) string {
-	return password
+func HashAndSalt(pwd []byte) string {
+	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
+	if err != nil {
+		log.Println(err)
+	}
+	return string(hash)
 }
 
 func EncodeToString(max int) string {

@@ -7,4 +7,5 @@ type User struct {
 	Phone    string `json:"phone"`
 	Password string `json:"password"`
 	Admin    bool   `json:"admin"`
+	ApiKey   string `json:"apikey"`
 }

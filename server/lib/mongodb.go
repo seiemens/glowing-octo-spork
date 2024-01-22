@@ -44,8 +44,9 @@ func CreateUser(username, email, phone, password string) interface{} {
 		Username: username,
 		Email:    email,
 		Phone:    phone,
-		Password: password,
+		Password: HashAndSalt([]byte(password)),
 		Admin:    false,
+		ApiKey:   GenerateRandomString(16, false),
 	}
 	userDB := Client.Database("fridge")
 	userCollection := userDB.Collection("userDB")
@@ -147,7 +148,7 @@ func AuthUser(username, password string) models.User {
 		}
 		log.Fatal(err)
 	}
-	if !CheckHashPassword(dbUser.Password, password) {
+	if !CheckHashPassword(dbUser.Password, []byte(password)) {
 		return models.User{}
 	}
 	return dbUser
@@ -254,4 +255,27 @@ func CreateNote(userID, title, content string) interface{} {
 func IsAdmin(userID string) bool {
 	user := GetUserByKey("id", userID)[0]
 	return user.Admin
+}
+
+func AddCommentToPost(cookie, postID, content, userID string) {
+	user := GetUserByKey("id", userID)[0]
+	dbCollection := *Client.Database("fridge").Collection("noteDB")
+	var addComment = models.Comment{
+		ID:      GenerateRandomString(6, false),
+		Content: content,
+		PostID:  postID,
+		Author:  user.Username,
+	}
+	filter := bson.M{"id": bson.M{"$eq": postID}}
+	change := bson.M{"$push": bson.M{"post.$.sales": addComment}}
+
+	err, _ := dbCollection.UpdateOne(
+		context.Background(),
+		filter,
+		change,
+	)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }

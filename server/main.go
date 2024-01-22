@@ -14,12 +14,14 @@ func main() {
 	router.Use(CORSMiddleware())
 
 	router.POST("/api/user/register", api.CreateUser)
-	router.POST("/api/user/auth", api.AuthUser)
+	router.POST("/api/user/login", api.LoginUser)
+	router.GET("/api/user/auth", api.AuthUser)
 	router.POST("/api/user/sms", api.VerifySMS)
 	router.GET("/api/user/info", api.GetUserData)
 
 	router.POST("/api/posts/create", api.CreateNote)
 	router.POST("/api/posts/get", api.GetNotes)
+	router.POST("/api/posts/comment", api.AddComment)
 	router.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 

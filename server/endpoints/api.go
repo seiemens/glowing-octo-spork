@@ -19,7 +19,7 @@ func CreateUser(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, gin.H{"answer": "user created successfully"})
 }
 
-func AuthUser(c *gin.Context) {
+func LoginUser(c *gin.Context) {
 	var user models.User
 	err := c.BindJSON(&user)
 	if err != nil {
@@ -35,8 +35,23 @@ func AuthUser(c *gin.Context) {
 		} else {
 			cookie := lib.CreateSessionToken(authUser.ID)
 			c.SetCookie("user", cookie.Cookie, 3600, "/", "localhost", false, true)
-			c.IndentedJSON(http.StatusOK, gin.H{"cookie": cookie.Cookie, "created": cookie.CreatedAt, "expire": cookie.ExpireOn})
+			c.IndentedJSON(http.StatusOK, gin.H{"answer": "authenticated"})
 		}
+	}
+}
+
+func AuthUser(c *gin.Context) {
+	cookie, err := c.Cookie("user")
+	if err != nil {
+		c.String(http.StatusNotFound, "Cookie not found")
+		return
+	}
+
+	ok, _ := lib.VerifySessionToken(cookie)
+	if ok {
+		c.IndentedJSON(http.StatusOK, gin.H{"answer": "authenticated"})
+	} else {
+		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
 	}
 }
 
@@ -61,12 +76,11 @@ func VerifySMS(c *gin.Context) {
 func GetUserData(c *gin.Context) {
 	var user models.User
 
-	cookie := c.Request.Header.Get("Cookie")
-	// cookie, err := c.Cookie("user")
-	// if err != nil {
-	//     c.String(http.StatusNotFound, "Cookie not found")
-	//     return
-	// }
+	cookie, err := c.Cookie("user")
+	if err != nil {
+		c.String(http.StatusNotFound, "Cookie not found")
+		return
+	}
 	ok, userID := lib.VerifySessionToken(cookie)
 	if ok {
 		users := lib.GetUserByKey("id", userID)
@@ -78,12 +92,12 @@ func GetUserData(c *gin.Context) {
 }
 
 func CreateNote(c *gin.Context) {
-	cookie := c.Request.Header.Get("Cookie")
-	// cookie, err := c.Cookie("user")
-	// if err != nil {
-	//     c.String(http.StatusNotFound, "Cookie not found")
-	//     return
-	// }
+
+	cookie, err := c.Cookie("user")
+	if err != nil {
+		c.String(http.StatusNotFound, "Cookie not found")
+		return
+	}
 	ok, userID := lib.VerifySessionToken(cookie)
 	if ok {
 		var note models.Note
@@ -109,12 +123,12 @@ func GetNotes(c *gin.Context) {
 		notes := lib.GetNoteByStatus("status", models.Published)
 		c.IndentedJSON(http.StatusOK, gin.H{"answer": notes})
 	} else if mode.Mode == "user" {
-		cookie := c.Request.Header.Get("Cookie")
-		// cookie, err := c.Cookie("user")
-		// if err != nil {
-		//     c.String(http.StatusNotFound, "Cookie not found")
-		//     return
-		// }
+
+		cookie, err := c.Cookie("user")
+		if err != nil {
+			c.String(http.StatusNotFound, "Cookie not found")
+			return
+		}
 		ok, userID := lib.VerifySessionToken(cookie)
 		if ok {
 			notes := lib.GetNoteByKey("userid", userID)
@@ -123,12 +137,12 @@ func GetNotes(c *gin.Context) {
 			c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
 		}
 	} else if mode.Mode == "admin" {
-		cookie := c.Request.Header.Get("Cookie")
-		// cookie, err := c.Cookie("user")
-		// if err != nil {
-		//     c.String(http.StatusNotFound, "Cookie not found")
-		//     return
-		// }
+
+		cookie, err := c.Cookie("user")
+		if err != nil {
+			c.String(http.StatusNotFound, "Cookie not found")
+			return
+		}
 		ok, userID := lib.VerifySessionToken(cookie)
 		if ok && lib.IsAdmin(userID) {
 			notes := lib.GetAllNotes()
@@ -140,4 +154,24 @@ func GetNotes(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"answer": "try again"})
 	}
 
+}
+
+func AddComment(c *gin.Context) {
+	cookie, err := c.Cookie("user")
+	if err != nil {
+		c.String(http.StatusNotFound, "Cookie not found")
+		return
+	}
+	ok, userID := lib.VerifySessionToken(cookie)
+	if ok {
+		var note models.Comment
+		err := c.BindJSON(&note)
+		if err != nil {
+			fmt.Println(err)
+		}
+		lib.AddCommentToPost(cookie, note.PostID, note.Content, userID)
+		c.IndentedJSON(http.StatusOK, gin.H{"answer": "comment created successfully"})
+	} else {
+		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
+	}
 }

@@ -3,5 +3,6 @@ package models
 type Comment struct {
 	ID      string `json:"id"`
 	Content string `json:"content"`
-	UserID  string `json:"userid"`
+	PostID  string `json:"postid"`
+	Author  string `json:"author"`
 }
