@@ -34,6 +34,7 @@ func AuthUser(c *gin.Context) {
 			c.IndentedJSON(http.StatusOK, gin.H{"id": pid, "phone": authUser.Phone})
 		} else {
 			cookie := lib.CreateSessionToken(authUser.ID)
+			c.SetCookie("user", cookie.Cookie, 3600, "/", "localhost", false, true)
 			c.IndentedJSON(http.StatusOK, gin.H{"cookie": cookie.Cookie, "created": cookie.CreatedAt, "expire": cookie.ExpireOn})
 		}
 	}
@@ -48,6 +49,8 @@ func VerifySMS(c *gin.Context) {
 	isOk, userId := lib.VerifySMSToken(sms.ProcessID, sms.AccessToken)
 	if isOk {
 		cookie := lib.CreateSessionToken(userId)
+		c.SetCookie("user", cookie.Cookie, 3600, "/", "localhost", false, true)
+
 		c.IndentedJSON(http.StatusOK, gin.H{"cookie": cookie.Cookie, "created": cookie.CreatedAt, "expire": cookie.ExpireOn})
 	} else {
 		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "wrong token"})
@@ -59,6 +62,11 @@ func GetUserData(c *gin.Context) {
 	var user models.User
 
 	cookie := c.Request.Header.Get("Cookie")
+	// cookie, err := c.Cookie("user")
+	// if err != nil {
+	//     c.String(http.StatusNotFound, "Cookie not found")
+	//     return
+	// }
 	ok, userID := lib.VerifySessionToken(cookie)
 	if ok {
 		users := lib.GetUserByKey("id", userID)
@@ -71,6 +79,11 @@ func GetUserData(c *gin.Context) {
 
 func CreateNote(c *gin.Context) {
 	cookie := c.Request.Header.Get("Cookie")
+	// cookie, err := c.Cookie("user")
+	// if err != nil {
+	//     c.String(http.StatusNotFound, "Cookie not found")
+	//     return
+	// }
 	ok, userID := lib.VerifySessionToken(cookie)
 	if ok {
 		var note models.Note
@@ -97,6 +110,11 @@ func GetNotes(c *gin.Context) {
 		c.IndentedJSON(http.StatusOK, gin.H{"answer": notes})
 	} else if mode.Mode == "user" {
 		cookie := c.Request.Header.Get("Cookie")
+		// cookie, err := c.Cookie("user")
+		// if err != nil {
+		//     c.String(http.StatusNotFound, "Cookie not found")
+		//     return
+		// }
 		ok, userID := lib.VerifySessionToken(cookie)
 		if ok {
 			notes := lib.GetNoteByKey("userid", userID)
@@ -106,6 +124,11 @@ func GetNotes(c *gin.Context) {
 		}
 	} else if mode.Mode == "admin" {
 		cookie := c.Request.Header.Get("Cookie")
+		// cookie, err := c.Cookie("user")
+		// if err != nil {
+		//     c.String(http.StatusNotFound, "Cookie not found")
+		//     return
+		// }
 		ok, userID := lib.VerifySessionToken(cookie)
 		if ok && lib.IsAdmin(userID) {
 			notes := lib.GetAllNotes()
