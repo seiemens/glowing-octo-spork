@@ -302,3 +302,12 @@ func Logout(cookie string) {
 		log.Fatal(err)
 	}
 }
+
+func DeleteSMSToken(pid string) {
+	tokenDB := Client.Database("fridge")
+	tokenCollection := tokenDB.Collection("smstokens")
+	_, err := tokenCollection.DeleteOne(context.Background(), bson.M{"process_id": pid})
+	if err != nil {
+		log.Fatal(err)
+	}
+}

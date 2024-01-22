@@ -63,10 +63,11 @@ func VerifySMS(c *gin.Context) {
 	}
 	isOk, userId := lib.VerifySMSToken(sms.ProcessID, sms.AccessToken)
 	if isOk {
+		lib.DeleteSMSToken(sms.ProcessID) // delete token after successful
 		cookie := lib.CreateSessionToken(userId)
 		c.SetCookie("user", cookie.Cookie, 3600, "/", "localhost", false, true)
 
-		c.IndentedJSON(http.StatusOK, gin.H{"cookie": cookie.Cookie, "created": cookie.CreatedAt, "expire": cookie.ExpireOn})
+		c.IndentedJSON(http.StatusOK, gin.H{"answer": "authenticated"})
 	} else {
 		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "wrong token"})
 	}
