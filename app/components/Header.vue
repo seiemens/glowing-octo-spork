@@ -15,5 +15,5 @@
 <style src="~/styles/header.css" scoped></style>
 
 <script setup>
-const authed = ref(true);
+const authed = ref(false);
 </script>
