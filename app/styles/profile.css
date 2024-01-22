@@ -43,7 +43,7 @@ img {
   height: 20vh;
 }
 
-input, button {
+.inputs input, .inputs button {
   border: none;
   
   font-size: 2vh;

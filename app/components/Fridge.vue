@@ -6,7 +6,7 @@
 
       <div class="buttons">
         <input type="text" placeholder="search a post-it!" id="filter" @input="filter()">
-        <button @click="newPost()" class="add-btn" v-if="type != 'public'">new post-it</button>
+        <button @click="newPost = !newPost" class="add-btn" v-if="type != 'public'">new post-it</button>
       </div>
       <span class="handle"></span>
     </div>
@@ -32,6 +32,7 @@
       :status="popup.status"
       :isOwner="checkOwner(popup.userID)"
     />
+    <NewPost v-if="newPost" @popup="newPost = !newPost"/>
   </div>
 </template>
 
@@ -52,7 +53,7 @@ const props = defineProps({
 
 const displayedPosts = ref(props.posts);
 const popup = ref(undefined);
-
+const newPost = ref(false);
 function filter() {
   const search = document.getElementById('filter').value.toLowerCase();
 

@@ -71,3 +71,31 @@
   font-size: 1.5vh;
   font-family: 'Gloria Hallelujah', cursive;
 }
+
+textarea {
+  background-color: var(--top);
+  border: none;
+  border-radius: 1vh;
+  width: 90%;
+  max-width: 90%;
+  min-width: 90%;
+  padding: 1vh;
+}
+
+.popup-input {
+  position: relative;
+  background-color: var(--top);
+  border: none;
+  border-radius: 1vh;
+  margin-top: 2vh;
+  padding: 1vh;
+  width: 90%;
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 2vh;
+}
+
+button {
+  background-color: var(--top);
+  color: black;
+  margin-bottom: 1vh;
+}

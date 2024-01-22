@@ -14,7 +14,10 @@
         </select>
       </div>
       
-      <a class="open-btn" @click="changeCommentState()">↫</a>
+      <div class="open-btn flex-v flex-h col">
+        <span>Comments</span>
+        <a @click="changeCommentState()">↫</a>
+      </div>
     </div>
     <div class="comments" :id="id">
       <div class="comment flex-v" v-for="c in comments">
@@ -41,17 +44,23 @@
 .open-btn {
   position: absolute;
   bottom: 0;
-  left: 50%;
-  font-weight:bold;
+  width: 100%;
+  font-family: 'Pacifico', cursive;
+}
+.open-btn a {
   font-size: 4vh;
   transform: rotateZ(v-bind(buttonRotation));
   transition: 0.25s;
 }
-
-.open-btn:hover {
+.open-btn a:hover {
   cursor: pointer;
   scale: 1.2;
   color: var(--body);
+}
+
+.open-btn span {
+  font-size: 2.5vh;
+  margin-bottom: -2vh;
 }
 </style>
 
