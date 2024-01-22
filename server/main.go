@@ -23,6 +23,7 @@ func main() {
 	router.GET("/api/user/logout", api.Logout)
 
 	router.POST("/api/posts/create", api.CreateNote)
+	router.POST("/api/posts/visibility", api.ChangeVisibility)
 	router.POST("/api/posts/get", api.GetNotes)
 	router.POST("/api/posts/comment", api.AddComment)
 	router.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")

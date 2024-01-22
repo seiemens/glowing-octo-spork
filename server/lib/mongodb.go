@@ -311,3 +311,19 @@ func DeleteSMSToken(pid string) {
 		log.Fatal(err)
 	}
 }
+
+func ChangeVisibility(postID string, status models.Status) {
+	tokenDB := Client.Database("fridge")
+	noteDB := tokenDB.Collection("noteDB")
+	filter := bson.M{"id": bson.M{"$eq": postID}}
+	update := bson.M{"$set": bson.M{"status": status}}
+
+	_, err := noteDB.UpdateOne(
+		context.Background(),
+		filter,
+		update,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+}

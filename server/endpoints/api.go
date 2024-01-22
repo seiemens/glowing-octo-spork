@@ -227,3 +227,27 @@ func Logout(c *gin.Context) {
 	c.SetCookie("user", "", -1, "/", "localhost", false, true)
 	c.String(http.StatusOK, "Cookie has been deleted")
 }
+
+func ChangeVisibility(c *gin.Context) {
+	var note models.Note
+	cookie, err := c.Cookie("user")
+	if err != nil {
+		c.String(http.StatusNotFound, "Cookie not found")
+		return
+	}
+	ok, userID := lib.VerifySessionToken(cookie)
+	if ok {
+		err := c.BindJSON(&note)
+		if err != nil {
+			fmt.Println(err)
+		}
+		if userID == note.UserID || lib.IsAdmin(userID) {
+			lib.ChangeVisibility(note.ID, note.Status)
+			c.IndentedJSON(http.StatusOK, gin.H{"answer": "status changed successfully"})
+		} else {
+			c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
+		}
+	} else {
+		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
+	}
+}
