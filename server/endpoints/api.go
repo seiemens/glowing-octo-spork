@@ -131,28 +131,16 @@ func GetNotes(c *gin.Context) {
 			return
 		}
 		ok, userID := lib.VerifySessionToken(cookie)
-		if ok {
+
+		if ok && lib.IsAdmin(userID) {
+			notes := lib.GetAllNotes()
+			c.IndentedJSON(http.StatusOK, gin.H{"answer": notes})
+		} else if ok {
 			notes := lib.GetNoteByKey("userid", userID)
 			c.IndentedJSON(http.StatusOK, gin.H{"answer": notes})
 		} else {
 			c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
 		}
-	} else if mode.Mode == "admin" {
-
-		cookie, err := c.Cookie("user")
-		if err != nil {
-			c.String(http.StatusNotFound, "Cookie not found")
-			return
-		}
-		ok, userID := lib.VerifySessionToken(cookie)
-		if ok && lib.IsAdmin(userID) {
-			notes := lib.GetAllNotes()
-			c.IndentedJSON(http.StatusOK, gin.H{"answer": notes})
-		} else {
-			c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
-		}
-	} else {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"answer": "try again"})
 	}
 
 }
