@@ -266,15 +266,29 @@ func AddCommentToPost(cookie, postID, content, userID string) {
 		PostID:  postID,
 		Author:  user.Username,
 	}
+	fmt.Println(addComment)
 	filter := bson.M{"id": bson.M{"$eq": postID}}
-	change := bson.M{"$push": bson.M{"post.$.sales": addComment}}
-
-	err, _ := dbCollection.UpdateOne(
+	change := bson.M{"$push": bson.M{"comments": addComment}}
+	_, err := dbCollection.UpdateOne(
 		context.Background(),
 		filter,
 		change,
 	)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
 
+func ChangePhone(number, userid string) {
+	dbCollection := *Client.Database("fridge").Collection("userDB")
+	filter := bson.M{"id": bson.M{"$eq": userid}}
+	update := bson.M{"$set": bson.M{"phone": number}}
+
+	_, err := dbCollection.UpdateOne(
+		context.Background(),
+		filter,
+		update,
+	)
 	if err != nil {
 		log.Fatal(err)
 	}

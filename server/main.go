@@ -18,6 +18,7 @@ func main() {
 	router.GET("/api/user/auth", api.AuthUser)
 	router.POST("/api/user/sms", api.VerifySMS)
 	router.GET("/api/user/info", api.GetUserData)
+	router.POST("/api/user/telefon", api.ChangePhone)
 
 	router.POST("/api/posts/create", api.CreateNote)
 	router.POST("/api/posts/get", api.GetNotes)

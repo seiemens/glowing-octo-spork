@@ -85,7 +85,7 @@ func GetUserData(c *gin.Context) {
 	if ok {
 		users := lib.GetUserByKey("id", userID)
 		user = users[0]
-		c.IndentedJSON(http.StatusOK, gin.H{"id": user.ID, "username": user.Username, "email": user.Email, "phone": user.Phone, "isAdmin": user.Admin})
+		c.IndentedJSON(http.StatusOK, gin.H{"id": user.ID, "username": user.Username, "email": user.Email, "phone": user.Phone, "isAdmin": user.Admin, "apiKey": user.ApiKey})
 	} else {
 		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
 	}
@@ -173,5 +173,26 @@ func AddComment(c *gin.Context) {
 		c.IndentedJSON(http.StatusOK, gin.H{"answer": "comment created successfully"})
 	} else {
 		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
+	}
+}
+
+func ChangePhone(c *gin.Context) {
+	var user models.User
+	cookie, err := c.Cookie("user")
+	if err != nil {
+		c.String(http.StatusNotFound, "Cookie not found")
+		return
+	}
+	ok, userID := lib.VerifySessionToken(cookie)
+	if ok {
+		err := c.BindJSON(&user)
+		if err != nil {
+			fmt.Println(err)
+		}
+		lib.ChangePhone(user.Phone, userID)
+		c.IndentedJSON(http.StatusOK, gin.H{"answer": "phone changed successfully"})
+	} else {
+		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
+
 	}
 }
