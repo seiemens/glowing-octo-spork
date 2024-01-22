@@ -293,3 +293,12 @@ func ChangePhone(number, userid string) {
 		log.Fatal(err)
 	}
 }
+
+func Logout(cookie string) {
+	tokenDB := Client.Database("fridge")
+	tokenCollection := tokenDB.Collection("sessions")
+	_, err := tokenCollection.DeleteOne(context.Background(), bson.M{"cookie": cookie})
+	if err != nil {
+		log.Fatal(err)
+	}
+}

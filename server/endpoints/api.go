@@ -196,3 +196,33 @@ func ChangePhone(c *gin.Context) {
 
 	}
 }
+
+func IsUserAdmin(c *gin.Context) {
+	cookie, err := c.Cookie("user")
+	if err != nil {
+		c.String(http.StatusNotFound, "Cookie not found")
+		return
+	}
+	ok, userID := lib.VerifySessionToken(cookie)
+	if ok {
+		if lib.IsAdmin(userID) {
+			c.IndentedJSON(http.StatusAccepted, gin.H{"answer": "is a admin"})
+		} else {
+			c.IndentedJSON(http.StatusUnauthorized, gin.H{"answer": "unauthorized"})
+
+		}
+	} else {
+		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
+	}
+}
+
+func Logout(c *gin.Context) {
+	cookie, err := c.Cookie("user")
+	if err != nil {
+		c.String(http.StatusNotFound, "Cookie not found")
+		return
+	}
+	lib.Logout(cookie)
+	c.SetCookie("user", "", -1, "/", "localhost", false, true)
+	c.String(http.StatusOK, "Cookie has been deleted")
+}
