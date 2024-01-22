@@ -20,9 +20,13 @@
       </div>
     </div>
     <div class="comments" :id="id">
+      <form class="comment flex-v" @submit.prevent="submitForm()">
+        <input class="popup-input ci" placeholder="your comment..." v-model="comment"/>
+        <button type="submit" class="ci">➤</button>
+      </form>
       <div class="comment flex-v" v-for="c in comments">
       <div class="author">from {{ c.author }}</div>
-      <div class="text">{{ c.comment }}</div>
+      <div class="text">{{ c.content }}</div>
       </div>
     </div>
   </div>
@@ -66,7 +70,7 @@
 
 <script setup>
 const props = defineProps({
-  id: Number,
+  id: String,
   title: String,
   content: String,
   author: String,
@@ -77,9 +81,10 @@ const props = defineProps({
   isOwner: Boolean
 });
 const postVisibility = ref(props.status);
-
 const commentsVisible = ref("-31vh");
 const buttonRotation = ref("-90deg");
+
+const comment = ref('');
 
 const emit = defineEmits(['popup']);
 function changePopupState() {
@@ -89,5 +94,22 @@ function changePopupState() {
 function changeCommentState() {
   commentsVisible.value = commentsVisible.value == "1vh" ? "-31vh" : "1vh";
   buttonRotation.value = buttonRotation.value == "-90deg" ? "90deg" : "-90deg";
+}
+
+async function submitForm() {
+  const data = {
+    postid:props.id,
+    content: comment.value
+  };
+
+  await $fetch('http://localhost:8080/api/posts/comment', {
+    method:'post',
+    credentials:'include',
+    body: JSON.stringify(data)
+  }).then((res)=>{
+    console.log(res);
+  }).catch((err)=>{
+    console.log(err);
+  });
 }
 </script>

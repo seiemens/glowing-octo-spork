@@ -41,6 +41,7 @@ code {
 
 img {
   height: 20vh;
+  border-radius: 2vh;
 }
 
 .inputs input, .inputs button {

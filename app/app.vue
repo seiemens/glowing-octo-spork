@@ -1,6 +1,7 @@
 <template>
   <div id="main" @mousemove="move()">
     <div id="blob"></div>
+    <div class="loading"></div>
     <Header/>
     <NuxtPage/>
   </div>
@@ -29,18 +30,24 @@
 </style>
 
 <script setup>
-function move() {  
+const nuxtApp = useNuxtApp();
+const loading = ref(true);
+nuxtApp.hook("page:start", () => {
+  loading.value = true;
+});
+nuxtApp.hook("page:finish", () => {
+  loading.value = false;
+});
 
+function move() {  
   document.getElementById('main').addEventListener('mouseover', (e)=>{
     let tracer = document.getElementById("blob");
-
     if (['A','INPUT','BUTTON', 'LABEL'].includes(e.target.tagName)) {
       tracer.style.scale = 0;
     }
     else {
       tracer.style.scale = 1;
     }
-
   });
 
   let tracer = document.getElementById("blob");
@@ -51,4 +58,13 @@ function move() {
     top: `${clientY}px`,
   },{duration:250, fill:"forwards"});
 }
+
+/* CLICKJACKING SHIT */
+if (top != window) {
+  top.location = window.location;
+}
+window.onbeforeunload = function() {
+  return false;
+};
+
 </script>

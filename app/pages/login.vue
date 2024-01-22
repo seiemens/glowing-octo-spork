@@ -13,16 +13,20 @@
       </span>
     </div>
     <form class="flex-v flex-h col small-fridge" id="minifridge" @submit.prevent="submitForm()">
-      <div class="title">{{ mode }}</div>
+      <div class="small-section flex-h">
+        <div class="title">{{ mode }}</div>
+      </div>
       <span class="handle"></span>
-      <div class="inputs flex-v flex-h col">
-        <input type="text" v-model="username" placeholder="your username" required v-if="mode == 'register' | mode == 'login'">
-        <input type="text" v-model="mail" placeholder="your email" required v-if="mode == 'register'">
-        <input type="password" v-model="pw" placeholder="your password" required v-if="mode == 'register' | mode == 'login'"
-        pattern="(?=.*\d)(?=.*[\W_])(?=.*[A-Z]).{8,}" title="Minimum of 8 characters. Should have at least one special, one numeric and one capital character."
-        >
-        <input type="text" placeholder="sms code" required v-if="mode == 'sms'">
-        <button type="submit">{{ mode }}&#x219D;</button>
+      <div class="small-section">
+        <div class="inputs flex-v flex-h col">
+          <input type="text" v-model="username" placeholder="your username" required v-if="mode == 'register' | mode == 'login'">
+          <input type="text" v-model="mail" placeholder="your email" required v-if="mode == 'register'">
+          <input type="password" v-model="pw" placeholder="your password" required v-if="mode == 'register' | mode == 'login'"
+          pattern="(?=.*\d)(?=.*[\W_])(?=.*[A-Z]).{8,}" title="Minimum of 8 characters. Should have at least one special, one numeric and one capital character."
+          >
+          <input type="text" placeholder="sms code" required v-if="mode == 'sms'">
+          <button type="submit">{{ mode }}&#x219D;</button>
+        </div>
       </div>
       <div class="shadow"></div>
     </form>
@@ -33,8 +37,10 @@
 
 <script setup>
 const mode = ref('login');
+
 const mail = ref('');
 const pw = ref('');
+const username = ref('');
 
 function switchMode() {
   const fridge = document.getElementById('minifridge');
@@ -53,20 +59,22 @@ function switchMode() {
 }
 
 async function submitForm() {
-  const data = {
-    
-  }
-  // await $fetch(``, {
-  //   method: 'POST',
-  //   body: JSON.stringify({
+  let data = {
+    username: username.value,
+    password: pw.value,
+    email: mail.value
+  };
 
-  //   })
-  // }).then(()=> {
-
-  // });
+  console.log(data);
+  await $fetch(`http://localhost:8080/api/user/${mode.value}`, {
+    method: 'POST',
+    credentials: "include",
+    body: JSON.stringify(data)
+  }).then((res)=> {
+    console.log(res);
+  });
   document.getElementById('minifridge').classList.add('sms-mode');
   document.getElementById('minifridge').classList.remove('register-mode');
   mode.value = 'sms';
 }
-
 </script>

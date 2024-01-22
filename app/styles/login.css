@@ -147,10 +147,6 @@
   right: 0;
 }
 
-.inputs {
-  position: absolute;
-  bottom: 4.75vh;
-}
 
 .inputs input, .inputs button {
   font-size: 2.5vh;
@@ -179,13 +175,12 @@ button:hover {
 }
 
 .title {
-  position: absolute;
-  top: 6vh;
   font-family: 'Lobster', sans-serif;
   font-size: 7vh;
   color:var(--accent);
 
   transform: rotateZ(-10deg);
+  margin-top: -2vh;
 }
 
 .shadow {
@@ -203,6 +198,13 @@ button:hover {
 
   animation: shrink 2.5s infinite;
 }
+
+.small-section {
+  height: 20vh;
+  width: 100%;
+  margin-top: -2.5vh;
+}
+
 
 @keyframes spiin {
   0% {

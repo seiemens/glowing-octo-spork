@@ -66,6 +66,7 @@
   background-color: var(--base);
   width: calc(80vh - 4vh);
   border-radius: 2vh;
+  border: none;
   padding: 2vh 2vh;
   margin: 2vh 0;
   font-size: 1.5vh;
@@ -97,5 +98,18 @@ textarea {
 button {
   background-color: var(--top);
   color: black;
-  margin-bottom: 1vh;
+}
+
+.ci {
+  margin-top: 0;
+  border: none;
+  
+  font-size: 2vh;
+  font-family: 'Gloria Hallelujah', cursive;
+
+  border-radius: 1vh;
+  padding: 0.5vh 1.5vh;
+
+  margin-right: 1vh;
+  transition: 0.1s;
 }

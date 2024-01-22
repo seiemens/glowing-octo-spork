@@ -54,9 +54,9 @@ const props = defineProps({
 const displayedPosts = ref(props.posts);
 const popup = ref(undefined);
 const newPost = ref(false);
+
 function filter() {
   const search = document.getElementById('filter').value.toLowerCase();
-
   displayedPosts.value = [];
 
   props.posts.forEach(element => {
@@ -68,7 +68,7 @@ function filter() {
 
 function checkOwner(id) {
   let uid = getUserID();
-  console.log(`${id} | ${uid}`);
+  
   // only show the visibility checkbox if its not on the public page
   if (((props.isAdmin) | (id == uid)) && props.type != "public") {
     return true;

@@ -2,7 +2,5 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['@/styles/global.css'],
-  alias: {
-    '/api/': 'http://localhost:4000/'
-  }
+  ssr:false 
 });

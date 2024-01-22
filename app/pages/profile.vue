@@ -4,29 +4,28 @@
       <div class="box">
         <div class="header">Details</div>
         <div class="infos flex-h col">
-          <span><span class="small-header">ID: </span>{{ ud.id }}</span>
-          <span><span class="small-header">Username: </span>{{ ud.username }}</span>
-          <span><span class="small-header">Email: </span>{{ ud.email }}</span>
+          <span><span class="small-header">Username: </span>{{ userData.username }}</span>
+          <span><span class="small-header">Email: </span>{{ userData.email }}</span>
         </div>
       </div>
       <div class="box">
         <div class="header">Phone #</div>
-        <div class="phone flex-h col">
+        <form class="phone flex-h col" @submit.prevent="changeTelNumber()">
           <div class="inputs">
-            <input id="tel-input" type="tel" disabled v-model="tel"/>
+            <input id="tel-input" type="text" pattern="[0-9]{12}" title="please enter a valid phone number (12 digits)" disabled v-model="tel" required/>
             <button @click="changeInputState()">✎</button>
           </div>
-          <button @click="changeTelNumber()">Change Phone Number</button>
-        </div>
+          <button type="submit">Change Phone Number</button>
+        </form>
       </div>
     </div>
     <div class="flex-h row">
       <div class="box api flex-v flex-h col">
         <span class="header">Your API key:</span>
-        <code>{{ ud.api_key }}</code>
+        <code>{{ userData.apiKey }}</code>
       </div>
       <div class="box flex-h flex-v">
-        <img src="~/public/vibin2cropped.gif" alt="">
+        <img :src="`https://chart.googleapis.com/chart?cht=qr&chs=400x400&chl=${generateQR()}`" alt="">
       </div>
     </div>
   </div>
@@ -35,25 +34,37 @@
 <style src="~/styles/profile.css"></style>
 
 <script setup>
-const ud = {
-  id:"3290428244",
-  username:"Kevin",
-  email:"kevin@kevin.ch",
-  phone: "435787654",
-  api_key: "OWidajodiwajdioajd0329448720"
-};
-const tel = ref(ud.phone);
+const userData = await $fetch('http://localhost:8080/api/user/info',{
+  method:'get',
+  credentials:'include'
+}).then((res)=>{
+  return res;
+}).catch((err)=>{
+  console.log(err);
+});
+
+const tel = ref(userData.phone);
+
+function generateQR() {
+    // a lot of extra stuff that isn't necessary but google needs it: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+    return encodeURI(`otpauth://totp/M183:TOTP?secret=${userData.apiKey}&issuer=OOGA BOOGA INC&algorithm=SHA1`);
+}
 
 function changeInputState(optional) {
   const telInput = document.getElementById('tel-input');
   telInput.disabled = optional || !telInput.disabled;
 }
 
-function changeTelNumber() {
-  console.log(ud.phone + " | " + tel.value);
-  if (ud.phone != tel.value) {
+async function changeTelNumber() {
+  if (userData.phone != tel.value) {
     // do api things
-
+    await $fetch('http://localhost:8080/api/user/telefon', {
+      method:'post',
+      credentials:'include',
+      body: JSON.stringify({phone: tel.value})
+    }).then((res)=>{
+      console.log(res);
+    }).catch((e)=>console.log(err));
     // lock the field again
     changeInputState(false);
   }

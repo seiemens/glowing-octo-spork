@@ -1,5 +1,5 @@
 export const getUserID = () => {
-  const cookieName = "ID";
+  const cookieName = "user";
   let cookies = document.cookie.split("; ");
   let val;
 
