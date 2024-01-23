@@ -20,7 +20,7 @@
   - Username: `Manfred`
   - Passwort: `Manfred123.`
   - Admin: `true`
-
+--------------------------
   - Username: `Michael`
   - Passwort: `Admin123.`
   - Admin: `false`
