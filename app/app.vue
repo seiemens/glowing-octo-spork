@@ -1,7 +1,8 @@
 <template>
   <div id="main" @mousemove="move()">
     <div id="blob"></div>
-    <div class="loading flex-h flex-v" v-if="loading">
+    <div class="loading flex-h flex-v col" v-if="loading">
+      <span class="spinheader">loading...</span>
       <div class="spinfridge">
         <span class="spinhandle"></span>
       </div>
