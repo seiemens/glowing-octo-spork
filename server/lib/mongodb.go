@@ -7,6 +7,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/pquerna/otp/totp"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -38,7 +39,7 @@ func CloseDbConnection(client *mongo.Client) {
 	}
 }
 
-func CreateUser(username, email, phone, password string) interface{} {
+func CreateUser(username, email, phone, password string, isAdmin bool) interface{} {
 	var x = models.User{
 		ID:       GenerateRandomString(8, false),
 		Username: username,
@@ -55,6 +56,7 @@ func CreateUser(username, email, phone, password string) interface{} {
 		log.Fatal(err)
 	}
 	fmt.Println("Successfully created user")
+
 	return x
 
 }
@@ -376,4 +378,24 @@ func CreateNaughtyOne(username string) models.Naughty {
 	}
 	_, err = naughtyCollection.InsertOne(context.Background(), t)
 	return t
+
+}
+
+func TOTP(inputTotp, userId string) bool {
+	user := GetUserByKey("id", userId)[0]
+	totp, err := totp.GenerateCode(user.ApiKey, time.Now())
+	if err != nil {
+		log.Fatal(err)
+	}
+	return totp == inputTotp
+}
+
+func IsInitialSetup() bool {
+	user := GetUserByKey("username", "Manfred")
+	return !(len(user) > 0)
+}
+
+func InsertInitialData() {
+	CreateUser("Manfred", "test@gmail.com", "", "Manfred123.", false)
+	CreateUser("Michael", "michihimmelsberger@gmail.com", "", "Admin123.", true)
 }

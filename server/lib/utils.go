@@ -8,6 +8,7 @@ import (
 	"log"
 	rand "math/rand"
 	"net/http"
+	"os"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -88,4 +89,12 @@ func SendSMS(phone, token string) {
 	}
 
 	defer res.Body.Close()
+}
+
+func OpenLogFile(path string) (*os.File, error) {
+	logFile, err := os.OpenFile(path, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	if err != nil {
+		return nil, err
+	}
+	return logFile, nil
 }

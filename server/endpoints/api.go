@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"fridge/lib"
 	"fridge/models"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,9 @@ func CreateUser(c *gin.Context) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	lib.CreateUser(user.Username, user.Email, user.Phone, user.Password)
+	lib.CreateUser(user.Username, user.Email, user.Phone, user.Password, false)
+	log.Println("created new user: " + user.Username)
+
 	c.IndentedJSON(http.StatusOK, gin.H{"answer": "user created successfully"})
 }
 
@@ -34,9 +37,12 @@ func LoginUser(c *gin.Context) {
 		if authUser.Phone != "" {
 			pid := lib.CreateSMSToken(authUser.Phone, authUser.ID)
 			c.IndentedJSON(http.StatusOK, gin.H{"id": pid, "phone": authUser.Phone})
+
 		} else {
 			cookie := lib.CreateSessionToken(authUser.ID)
 			c.SetCookie("user", cookie.Cookie, 3600, "/", "localhost", false, true)
+			log.Println("user signed in without phone number: " + authUser.ID)
+
 			c.IndentedJSON(http.StatusOK, gin.H{"answer": "authenticated"})
 		}
 	}
@@ -68,6 +74,7 @@ func VerifySMS(c *gin.Context) {
 		lib.DeleteSMSToken(sms.ProcessID) // delete token after successful
 		cookie := lib.CreateSessionToken(userId)
 		c.SetCookie("user", cookie.Cookie, 3600, "/", "localhost", false, true)
+		log.Println("user signed in with phone number: " + userId)
 
 		c.IndentedJSON(http.StatusOK, gin.H{"answer": "authenticated"})
 	} else {
@@ -110,6 +117,8 @@ func CreateNote(c *gin.Context) {
 		}
 		lib.CreateNote(userID, note.Title, note.Content)
 		c.IndentedJSON(http.StatusOK, gin.H{"answer": "note created successfully"})
+		log.Println("user: " + userID + " created new note")
+
 	} else {
 		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
 	}
@@ -162,6 +171,8 @@ func AddComment(c *gin.Context) {
 		}
 		lib.AddCommentToPost(cookie, note.PostID, note.Content, userID)
 		c.IndentedJSON(http.StatusOK, gin.H{"answer": "comment created successfully"})
+		log.Println("user: " + userID + " created new comment")
+
 	} else {
 		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
 	}
@@ -181,6 +192,8 @@ func ChangePhone(c *gin.Context) {
 			fmt.Println(err)
 		}
 		lib.ChangePhone(user.Phone, userID)
+		log.Println("user: " + userID + " changed phone number")
+
 		c.IndentedJSON(http.StatusOK, gin.H{"answer": "phone changed successfully"})
 	} else {
 		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
@@ -215,6 +228,8 @@ func Logout(c *gin.Context) {
 	}
 	lib.Logout(cookie)
 	c.SetCookie("user", "", -1, "/", "localhost", false, true)
+	log.Println("user signed out")
+
 	c.String(http.StatusOK, "Cookie has been deleted")
 }
 
@@ -233,6 +248,8 @@ func ChangeVisibility(c *gin.Context) {
 		}
 		if userID == note.UserID || lib.IsAdmin(userID) {
 			lib.ChangeVisibility(note.ID, note.Status)
+			log.Println("note: " + note.ID + " status was changed")
+
 			c.IndentedJSON(http.StatusOK, gin.H{"answer": "status changed successfully"})
 		} else {
 			c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
@@ -261,5 +278,24 @@ func NaughtyUser(c *gin.Context) {
 		fmt.Println(err)
 	}
 	lib.CreateNaughtyOne(naughty.Username)
-	c.IndentedJSON(http.StatusOK, gin.H{"answer": "user created successfully"})
+	log.Println("user: " + naughty.Username + " became naughty")
+
+	c.IndentedJSON(http.StatusOK, gin.H{"answer": "naughty user created successfully"})
+}
+
+func ValidateTotp(c *gin.Context) {
+	var totp models.Totp
+	cookie, err := c.Cookie("user")
+	if err != nil {
+		c.String(http.StatusNotFound, "Cookie not found")
+		return
+	}
+	ok, userID := lib.VerifySessionToken(cookie)
+	if ok {
+		if lib.TOTP(totp.Totp, userID) {
+			c.IndentedJSON(http.StatusOK, gin.H{"answer": "totp is fine"})
+		} else {
+			c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
+		}
+	}
 }
