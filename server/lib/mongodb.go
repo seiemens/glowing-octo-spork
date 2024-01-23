@@ -351,7 +351,7 @@ func ValidateAPIKey(key string) bool {
 }
 
 func IsUserNaughty(username string) bool {
-	naughty := GetUserByKey("username", username)
+	naughty := GetNaughtyByKey("username", username)
 	return len(naughty) > 0
 }
 
