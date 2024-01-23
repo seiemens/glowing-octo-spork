@@ -1,7 +1,11 @@
 <template>
   <div id="main" @mousemove="move()">
     <div id="blob"></div>
-    <div class="loading"></div>
+    <div class="loading flex-h flex-v" v-if="loading">
+      <div class="spinfridge">
+        <span class="spinhandle"></span>
+      </div>
+    </div>
     <Header/>
     <NuxtPage/>
   </div>
@@ -36,7 +40,9 @@ nuxtApp.hook("page:start", () => {
   loading.value = true;
 });
 nuxtApp.hook("page:finish", () => {
-  loading.value = false;
+  setTimeout(() => {
+    loading.value = false;
+  }, 1800);
 });
 
 function move() {  
