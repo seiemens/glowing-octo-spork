@@ -143,7 +143,7 @@ button:hover {
   4vh -2vh var(--lback), 3vh -1.5vh var(--lback), 
   2vh -1vh var(--lback), 1vh -0.5vh var(--lback);
 
-  animation: loader 1.5s cubic-bezier(0.595, -0.250, 0.265, 1.550) infinite;
+  animation: loader 1.3s cubic-bezier(0.595, -0.250, 0.265, 1.550) infinite;
 }
 
 .spinfridge::before {

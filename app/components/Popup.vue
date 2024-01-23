@@ -15,7 +15,7 @@
       </div>
       
       <div class="open-btn flex-v flex-h col">
-        <span>Comments</span>
+        <span>comments</span>
         <a @click="changeCommentState()">↫</a>
       </div>
     </div>
@@ -28,6 +28,18 @@
       <div class="author">from {{ c.author }}</div>
       <div class="text">{{ c.content }}</div>
       </div>
+    </div>
+
+    <div class="totp flex-h flex-v" v-if="totp">
+      <div class="totp-bg"></div>
+      <form class="flex-h flex-v col" @submit.prevent="validateTOTP()">
+        <span class="small-title colors-2">hold your horses!</span>
+        <input type="text" placeholder="your totp code" class="popup-input colors-2" v-model="totpInput">
+        <div class="btns">
+          <button type="submit" class="colors-2">submit</button>
+          <button class="colors-2" @click="cancelTOTP()">cancel</button>
+        </div>
+      </form>      
     </div>
   </div>
 </template>
@@ -78,14 +90,16 @@ const props = defineProps({
   comments: Array,
   status: Number,
 
-  isOwner: Boolean
+  isOwner: Boolean,
+  isAdmin: Boolean
 });
 const postVisibility = ref(props.status);
 const commentsVisible = ref("-31vh");
 const buttonRotation = ref("-90deg");
 
 const comment = ref('');
-
+const totp = ref(false);
+const totpInput = ref('');
 
 const emit = defineEmits(['popup']);
 function changePopupState() {
@@ -113,12 +127,43 @@ async function submitForm() {
     credentials:'include',
     body: JSON.stringify(data)
   }).then((res)=>{
-    
+    alert('comment posted!');
+    reloadNuxtApp();
   }).catch((err)=>{
+    console.log(err);
   });
 }
 
 watch(postVisibility, async ()=>{
+  if (postVisibility.value == "1" && props.status == "2" && props.isAdmin) {
+    totp.value = !totp.value;
+  }
+  else {
+    updateVisibility();
+  }
+});
+
+async function validateTOTP() {
+  console.log(totpInput.value)
+  await $fetch('http://localhost:8080/api/user/totp', {
+    method:'post',
+    credentials:'include',
+    body: JSON.stringify({
+      totp: totpInput.value
+    })
+  }).then((res)=>{
+    updateVisibility();
+  }).catch((err)=>{
+    alert('Wrong TOTP-Code!');
+  });
+}
+
+function cancelTOTP() {
+  totp.value = false;
+  postVisibility.value = props.status;
+}
+
+async function updateVisibility() {
   const data = {
     id: props.id,
     userid: props.userid,
@@ -130,9 +175,15 @@ watch(postVisibility, async ()=>{
     credentials:'include',
     body: JSON.stringify(data)
   }).then((res)=>{
+    alert('visibility changed!');
     reloadNuxtApp();
   }).catch((err)=>{
     console.log(err);
   });
-});
+}
+
+/*
+
+*/
 </script>
+

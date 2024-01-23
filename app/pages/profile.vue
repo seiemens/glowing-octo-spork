@@ -25,7 +25,7 @@
         <code>{{ userData.apiKey }}</code>
       </div>
       <div class="box flex-h flex-v">
-        <img :src="`https://chart.googleapis.com/chart?cht=qr&chs=400x400&chl=${generateQR()}`" alt="">
+        <img :src="`https://chart.googleapis.com/chart?cht=qr&chs=400x400&chl=${generateQR()}`" alt="TOTP QR" crossorigin>
       </div>
     </div>
   </div>

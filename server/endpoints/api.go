@@ -285,6 +285,7 @@ func NaughtyUser(c *gin.Context) {
 
 func ValidateTotp(c *gin.Context) {
 	var totp models.Totp
+	err := c.BindJSON(&totp)
 	cookie, err := c.Cookie("user")
 	if err != nil {
 		c.String(http.StatusNotFound, "Cookie not found")

@@ -31,6 +31,7 @@
       :userid="popup.userid"
       :status="popup.status"
       :isOwner="checkOwner(popup.userid)"
+      :isAdmin="isAdmin"
     />
     <NewPost v-if="newPost" @popup="newPost = !newPost"/>
   </div>
@@ -69,7 +70,6 @@ function filter() {
 }
 
 function checkOwner(id) {
-  console.log(uid + " | " + id);
   // only show the visibility checkbox if its not on the public page
   if (((props.isAdmin) | (id == uid)) && props.type != "public") {
     return true;

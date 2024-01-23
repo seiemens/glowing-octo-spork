@@ -43,7 +43,7 @@ nuxtApp.hook("page:start", () => {
 nuxtApp.hook("page:finish", () => {
   setTimeout(() => {
     loading.value = false;
-  }, 1800);
+  }, 1500);
 });
 
 function move() {  

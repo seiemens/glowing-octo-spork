@@ -113,3 +113,49 @@ button {
   margin-right: 1vh;
   transition: 0.1s;
 }
+
+
+/*
+-- TOTP STUFF --
+*/
+
+.totp {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+
+}
+
+.totp form {
+  padding: 2vh;
+  background-color: #7381ff;
+  border-radius: 2vh;
+  z-index: 100;
+}
+.totp button {
+  margin-right: 1vh;
+}
+.colors-2 {
+  --top: var(--white);
+}
+
+.small-title {
+  font-family: 'Lobster', sans-serif;
+  font-size: 4vh;
+  color: var(--top);
+}
+
+.totp-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.4;
+  z-index: 50;
+}
