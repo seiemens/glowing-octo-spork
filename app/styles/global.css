@@ -26,6 +26,14 @@
   */
   --base: #FEF172;
   --top: #e2d664;
+
+
+  /*
+  -- LOADER --
+  */
+  --lbase: #9412df;
+  --lbottom: #680e9c;
+  --lback: #480a6b;
 }
 
 * {
@@ -100,4 +108,82 @@ button:hover {
 .pad-2 {
   padding: 2vh;
   font-size: 2vh;
+}
+
+/*
+----- LOADING ANIMATION -----
+*/
+
+.loading {
+  position:fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  background-color: var(--white);
+}
+
+.spinfridge {
+  position: relative;
+  width: 25vh;
+  height: 35vh;
+  border-radius: 4vh;
+  background-color: var(--lbase);
+
+  box-shadow: 7vh -3.5vh var(--lback), 
+  6vh -3vh var(--lback), 5vh -2.5vh var(--lback), 
+  4vh -2vh var(--lback), 3vh -1.5vh var(--lback), 
+  2vh -1vh var(--lback), 1vh -0.5vh var(--lback);
+
+  animation: loader 1.5s cubic-bezier(0.595, -0.250, 0.265, 1.550) infinite;
+}
+
+.spinfridge::before {
+  content: "";
+  position: absolute;
+  top: 12.5vh;
+  width: 100%;
+
+  height: 1.5vh;
+  background-image: linear-gradient(0deg, var(--accent) 33%, var(--div) 33%, var(--div) 66%, var(--accent) 66%);
+}
+
+.spinfridge::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+
+  width: 100%;
+  height: 3.5vh;
+
+  background-color: var(--lbottom);
+  border-radius: 0 0 4vh 4vh;
+}
+
+.spinhandle, .spinfridge::after {
+  position: absolute;
+  right: 2vh;
+  top: 15.5vh;
+
+  height: 1.5vh;
+  width: 7.5vh;
+  background-image: linear-gradient(0deg, var(--accent) 50%, var(--accent2) 50%);
+  border-radius: 20vh 15vh 15vh 20vh;
+}
+
+.spinfridge::after {
+  top: 9.5vh;
+}
+
+@keyframes loader {
+  from {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
 }
