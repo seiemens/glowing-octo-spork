@@ -87,7 +87,7 @@ func GetSessionByKey(key string, value interface{}) []models.Cookie {
 
 func GetUserByKey(key string, value interface{}) []models.User {
 	dbCollection := *Client.Database("fridge").Collection("userDB")
-	res, err := dbCollection.Find(context.Background(), bson.D{{key, primitive.Regex{Pattern: "^.*" + value.(string) + ".*", Options: ""}}})
+	res, err := dbCollection.Find(context.Background(), bson.D{{key, value.(string)}})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -325,5 +325,14 @@ func ChangeVisibility(postID string, status models.Status) {
 	)
 	if err != nil {
 		log.Fatal(err)
+	}
+}
+
+func ValidateAPIKey(key string) bool {
+	user := GetUserByKey("apikey", key)
+	if len(user) > 0 {
+		return true
+	} else {
+		return false
 	}
 }

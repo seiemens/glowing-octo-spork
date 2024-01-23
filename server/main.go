@@ -12,7 +12,7 @@ func main() {
 	//lib.CreateSessionToken("5Ygiw8N8")
 	router := gin.New()
 	router.Use(CORSMiddleware())
-
+	lib.ValidateAPIKey("asdfasdfasdf")
 	router.POST("/api/user/register", api.CreateUser)
 	router.POST("/api/user/login", api.LoginUser)
 	router.GET("/api/user/auth", api.AuthUser)
@@ -26,7 +26,9 @@ func main() {
 	router.POST("/api/posts/visibility", api.ChangeVisibility)
 	router.POST("/api/posts/get", api.GetNotes)
 	router.POST("/api/posts/comment", api.AddComment)
-	router.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+
+	router.GET("/api/posts", api.GetPublicPosts) // only accessible with user api key
+	router.Run()                                 // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
 func CORSMiddleware() gin.HandlerFunc {

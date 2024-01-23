@@ -239,3 +239,15 @@ func ChangeVisibility(c *gin.Context) {
 		c.IndentedJSON(http.StatusTeapot, gin.H{"answer": "unauthorized"})
 	}
 }
+
+func GetPublicPosts(c *gin.Context) {
+	APIKey := c.Request.Header.Get("X-API-Key")
+	ok := lib.ValidateAPIKey(APIKey)
+	fmt.Println(APIKey)
+	if ok {
+		posts := lib.GetNoteByStatus("status", models.Published)
+		c.IndentedJSON(http.StatusOK, gin.H{"answer": posts})
+	} else {
+		c.IndentedJSON(http.StatusUnauthorized, gin.H{"answer": "unauthorized"})
+	}
+}
