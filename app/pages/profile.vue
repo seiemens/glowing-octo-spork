@@ -40,7 +40,7 @@ const userData = await $fetch('http://localhost:8080/api/user/info',{
 }).then((res)=>{
   return res;
 }).catch((err)=>{
-  console.log(err);
+  navigateTo('/');
 });
 
 const tel = ref(userData.phone);
@@ -64,6 +64,8 @@ async function changeTelNumber() {
       body: JSON.stringify({phone: tel.value})
     }).then((res)=>{
       console.log(res);
+      alert('phone number changed!');
+      reloadNuxtApp();
     }).catch((e)=>console.log(err));
     // lock the field again
     changeInputState(false);

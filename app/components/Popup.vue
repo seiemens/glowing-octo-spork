@@ -74,7 +74,7 @@ const props = defineProps({
   title: String,
   content: String,
   author: String,
-  userID: String,
+  userid: String,
   comments: Array,
   status: Number,
 
@@ -85,6 +85,7 @@ const commentsVisible = ref("-31vh");
 const buttonRotation = ref("-90deg");
 
 const comment = ref('');
+
 
 const emit = defineEmits(['popup']);
 function changePopupState() {
@@ -97,9 +98,14 @@ function changeCommentState() {
 }
 
 async function submitForm() {
+  if (await auth() == false) {
+    alert('you have to sign in to write a comment.');
+    navigateTo('/login');
+  }
+
   const data = {
     postid:props.id,
-    content: comment.value
+    content: comment.value.substring(0,200)
   };
 
   await $fetch('http://localhost:8080/api/posts/comment', {
@@ -107,9 +113,26 @@ async function submitForm() {
     credentials:'include',
     body: JSON.stringify(data)
   }).then((res)=>{
-    console.log(res);
+    
+  }).catch((err)=>{
+  });
+}
+
+watch(postVisibility, async ()=>{
+  const data = {
+    id: props.id,
+    userid: props.userid,
+    status: Number.parseInt(postVisibility.value)
+  };
+
+  await $fetch('http://localhost:8080/api/posts/visibility', {
+    method:'post',
+    credentials:'include',
+    body: JSON.stringify(data)
+  }).then((res)=>{
+    reloadNuxtApp();
   }).catch((err)=>{
     console.log(err);
   });
-}
+});
 </script>

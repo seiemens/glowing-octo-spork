@@ -1,15 +1,9 @@
-export const getUserID = () => {
-  const cookieName = "user";
-  let cookies = document.cookie.split("; ");
-  let val;
-
-  cookies.forEach((cookie)=>{
-    let [cname, cval] = cookie.split("=");
-
-    if (cname === cookieName) {
-      val = cval;
-    }
-  });
-
-  return val || false;
+export const getUserID = async () => {
+  return await $fetch('http://localhost:8080/api/user/info', {
+    credentials:'include'
+  }).then((res:any)=>{
+    return res.id;
+  }).catch(()=>{
+    return false;
+  })
 }

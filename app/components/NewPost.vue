@@ -3,8 +3,8 @@
     <div class="bg" @click="changePopupState()"></div>
     <form class="contents flex-v col" @submit.prevent="submitForm()">
       <div class="popup-header flex-h flex-v">New Post</div>
-      <input type="text" placeholder="title" class="popup-input" v-model="title">
-      <textarea class="text flex-v" v-model="content" placeholder="contents of post-it"></textarea>
+      <input type="text" placeholder="title" class="popup-input" v-model="title" required>
+      <textarea class="text flex-v" v-model="content" placeholder="contents of post-it" required></textarea>
       <button type="submit">post-it!</button>
     </form>
   </div>
@@ -33,6 +33,8 @@ async function submitForm() {
     body: JSON.stringify(data)
   }).then((res)=>{
     console.log(res);
+    alert('post created!');
+    reloadNuxtApp();
   });
 }
 </script>

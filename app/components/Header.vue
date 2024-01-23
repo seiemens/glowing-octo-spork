@@ -15,11 +15,11 @@
 <style src="~/styles/header.css" scoped></style>
 
 <script setup>
-const authed = ref(auth());
+const authed = ref(await auth());
 
 async function endSession() {
   await $fetch('http://localhost:8080/api/user/logout', {credentials:'include'}).then((res)=>{
-    navigateTo('/login');
+    navigateTo('/login').then(()=>{reloadNuxtApp();});
   });
 }
 </script>

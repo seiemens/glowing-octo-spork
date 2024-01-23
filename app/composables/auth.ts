@@ -1,7 +1,10 @@
 /// authentication composable
 export default async function() {
-  const result = await $fetch('http://localhost:3000/api/user/auth',{credentials:"include"});
-  if(result == false) {
-      navigateTo('/login');
-  } 
+  return await $fetch('http://localhost:8080/api/user/auth',{
+    credentials:"include"
+  }).then((res)=>{
+    return true;
+  }).catch((err)=> {
+    return false;
+  });
 }

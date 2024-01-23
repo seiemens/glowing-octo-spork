@@ -63,8 +63,5 @@ function move() {
 if (top != window) {
   top.location = window.location;
 }
-window.onbeforeunload = function() {
-  return false;
-};
 
 </script>

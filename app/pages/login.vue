@@ -24,7 +24,7 @@
           <input type="password" v-model="pw" placeholder="your password" required v-if="mode == 'register' | mode == 'login'"
           pattern="(?=.*\d)(?=.*[\W_])(?=.*[A-Z]).{8,}" title="Minimum of 8 characters. Should have at least one special, one numeric and one capital character."
           >
-          <input type="text" placeholder="sms code" required v-if="mode == 'sms'">
+          <input type="text" v-model="sms" placeholder="sms code " required v-if="mode == 'sms'">
           <button type="submit">{{ mode }}&#x219D;</button>
         </div>
       </div>
@@ -41,6 +41,10 @@ const mode = ref('login');
 const mail = ref('');
 const pw = ref('');
 const username = ref('');
+
+// for auth
+const id = ref('');
+const sms = ref('');
 
 function switchMode() {
   const fridge = document.getElementById('minifridge');
@@ -59,22 +63,63 @@ function switchMode() {
 }
 
 async function submitForm() {
-  let data = {
-    username: username.value,
-    password: pw.value,
-    email: mail.value
-  };
+  if (mode.value == 'sms') {
+    await $fetch('http://localhost:8080/api/user/sms', {
+      method:'post',
+      credentials:'include',
+      body: JSON.stringify({process_id: id.value, access_token: sms.value})
+    }).then((res)=>{
+      if (res.answer == 'authenticated') {
+        navigateTo('/dashboard').then(()=>{reloadNuxtApp()});;
+      }
+    }).catch(()=>{
+      alert('wrong token');
+    });
+  }
+  else {
+    let data = {
+      username: username.value,
+      password: pw.value,
+      email: mail.value
+    };
 
-  console.log(data);
-  await $fetch(`http://localhost:8080/api/user/${mode.value}`, {
-    method: 'POST',
-    credentials: "include",
-    body: JSON.stringify(data)
-  }).then((res)=> {
-    console.log(res);
-  });
-  document.getElementById('minifridge').classList.add('sms-mode');
-  document.getElementById('minifridge').classList.remove('register-mode');
-  mode.value = 'sms';
+    await $fetch(`http://localhost:8080/api/user/${mode.value}`, {
+      method: 'POST',
+      credentials: "include",
+      body: JSON.stringify(data)
+    }).then((res)=> {
+      if (res.answer != 'authenticated') {
+        // init sms bullshit
+        document.getElementById('minifridge').classList.add('sms-mode');
+        document.getElementById('minifridge').classList.remove('register-mode');
+        mode.value = 'sms'; 
+        id.value = res.id;
+      }
+      else {
+        navigateTo('/dashboard').then(()=>{reloadNuxtApp()});;
+      }
+      console.log(res);
+    }).catch(()=>{
+      // only lock out the user if he's "guessing" a password and isn't an old, senile granny :)
+      if (username.value == localStorage.getItem('prevUsername')) {
+        stillCounting();
+      } else {
+        localStorage.setItem('prevUsername', username.value);
+      }     
+      alert('wrong password / username!');
+    });
+  }
+}
+
+// hehe volbeat joke
+async function stillCounting() {
+  let c = Number.parseInt(localStorage.getItem('failure'));
+  c++;
+  localStorage.setItem('failure', `${c}`);
+
+  // jail time
+  if (c === 3) {
+
+  }
 }
 </script>
