@@ -66,7 +66,9 @@ function move() {
   },{duration:250, fill:"forwards"});
 }
 
-/* CLICKJACKING SHIT */
+/* CLICKJACKING STUFF */
+
+// very basic Framebreaker
 if (top != window) {
   top.location = window.location;
 }

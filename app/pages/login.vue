@@ -113,13 +113,20 @@ async function submitForm() {
 
 // hehe volbeat joke
 async function stillCounting() {
-  let c = Number.parseInt(localStorage.getItem('failure'));
+  let c = Number.parseInt(sessionStorage.getItem('failure') || 0);
   c++;
-  localStorage.setItem('failure', `${c}`);
-
-  // jail time
+  sessionStorage.setItem('failure', `${c}`);
+  console.log(c);
+  
+  // jail time (2 since the first one is skipped)
   if (c === 3) {
-
+    sessionStorage.clear();
+    await $fetch('http://localhost:8080/api/user/naughty', {
+      method:'post',
+      body: JSON.stringify({username:username.value})
+    }).then((res)=> {
+      console.log(res);
+    });
   }
 }
 </script>
