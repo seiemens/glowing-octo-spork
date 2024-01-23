@@ -98,6 +98,19 @@ func GetUserByKey(key string, value interface{}) []models.User {
 	return result
 }
 
+func GetNaughtyByKey(key string, value interface{}) []models.Naughty {
+	dbCollection := *Client.Database("fridge").Collection("naughtylist")
+	res, err := dbCollection.Find(context.Background(), bson.D{{key, value.(string)}})
+	if err != nil {
+		log.Fatal(err)
+	}
+	var result []models.Naughty
+	if err = res.All(context.Background(), &result); err != nil {
+		log.Fatal(err)
+	}
+	return result
+}
+
 func GetNoteByStatus(key string, value models.Status) []models.Note {
 	dbCollection := *Client.Database("fridge").Collection("noteDB")
 	res, err := dbCollection.Find(context.Background(), bson.D{{key, value}})
@@ -335,4 +348,32 @@ func ValidateAPIKey(key string) bool {
 	} else {
 		return false
 	}
+}
+
+func IsUserNaughty(username string) bool {
+	naughty := GetUserByKey("username", username)
+	return len(naughty) > 0
+}
+
+func CreateNaughtyOne(username string) models.Naughty {
+	tokenDB := Client.Database("fridge")
+	naughtyCollection := tokenDB.Collection("naughtylist")
+	t := models.Naughty{
+		Username:  username,
+		CreatedAt: time.Now().UTC(),
+		ExpireOn:  time.Now().Add(time.Minute * 5).Unix(),
+	}
+
+	model := mongo.IndexModel{
+		Keys:    bson.M{"created_at": 1},
+		Options: options.Index().SetExpireAfterSeconds(300), // delete session after 1h
+	}
+
+	_, err := naughtyCollection.Indexes().CreateOne(context.Background(), model)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = naughtyCollection.InsertOne(context.Background(), t)
+	return t
 }

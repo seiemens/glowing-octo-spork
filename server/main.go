@@ -21,6 +21,7 @@ func main() {
 	router.POST("/api/user/telefon", api.ChangePhone)
 	router.GET("/api/user/isadmin", api.IsUserAdmin)
 	router.GET("/api/user/logout", api.Logout)
+	router.POST("/api/user/naughty", api.NaughtyUser)
 
 	router.POST("/api/posts/create", api.CreateNote)
 	router.POST("/api/posts/visibility", api.ChangeVisibility)
@@ -28,7 +29,8 @@ func main() {
 	router.POST("/api/posts/comment", api.AddComment)
 
 	router.GET("/api/posts", api.GetPublicPosts) // only accessible with user api key
-	router.Run()                                 // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+
+	router.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
 func CORSMiddleware() gin.HandlerFunc {

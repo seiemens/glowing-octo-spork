@@ -26,7 +26,9 @@ func LoginUser(c *gin.Context) {
 		fmt.Println(err)
 	}
 	authUser := lib.AuthUser(user.Username, user.Password)
-	if authUser.ID == "" {
+	if lib.IsUserNaughty(user.Username) {
+		c.IndentedJSON(http.StatusForbidden, gin.H{"answer": "User is naughty"})
+	} else if authUser.ID == "" {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"answer": 404})
 	} else {
 		if authUser.Phone != "" {
@@ -250,4 +252,14 @@ func GetPublicPosts(c *gin.Context) {
 	} else {
 		c.IndentedJSON(http.StatusUnauthorized, gin.H{"answer": "unauthorized"})
 	}
+}
+
+func NaughtyUser(c *gin.Context) {
+	var naughty models.Naughty
+	err := c.BindJSON(&naughty)
+	if err != nil {
+		fmt.Println(err)
+	}
+	lib.CreateNaughtyOne(naughty.Username)
+	c.IndentedJSON(http.StatusOK, gin.H{"answer": "user created successfully"})
 }
